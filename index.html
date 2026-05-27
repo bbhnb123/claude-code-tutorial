@@ -1491,44 +1491,45 @@ p, li {
 
 
 <!-- ==========================================
-         SLIDE 8: VS CHAT AI (enhanced comparison)
+         SLIDE 8: VS CHAT AI (scenario-based)
      ========================================== -->
 <section class="slide">
   <div class="slide-label">Difference</div>
   <div class="slide-content">
-    <h2 class="reveal-scale" style="margin-bottom:0.5rem;">它和普通 AI 有什么不同？</h2>
-    <p class="reveal-blur text-gold" style="font-size:clamp(1rem,2.5vw,1.5rem);font-weight:700;text-align:center;margin-bottom:var(--content-gap);">
-      "普通 AI 给你一个答案，Claude Code 给你一个成品。"
-    </p>
-    <div class="two-col reveal-scale" style="position:relative;margin-top:var(--content-gap);max-width:min(95vw,64rem);margin-left:auto;margin-right:auto;">
-      <div class="card compare-left" style="padding:clamp(1rem,2vw,1.5rem);text-align:right;">
-        <h3 style="color:var(--text-muted);margin-bottom:0.8rem;">&#x2715; 普通 AI 对话</h3>
-        <div style="display:flex;flex-direction:column;gap:0.5rem;align-items:flex-end;">
-          <p style="color:var(--text-secondary);">一问一答，说完就结束</p>
-          <p style="color:var(--text-secondary);">答案需要手动复制粘贴</p>
-          <p style="color:var(--text-secondary);">只能给建议，无法动手执行</p>
-          <p style="color:var(--text-secondary);">不了解你的项目上下文</p>
-          <p style="color:var(--text-muted);font-weight:600;border-top:1px solid rgba(255,255,255,0.08);padding-top:0.6rem;">
-            产出：一段文字
+    <h2 class="reveal-scale" style="margin-bottom:clamp(0.8rem,1.5vw,1.2rem);">同一个需求，两种结果</h2>
+    <p class="reveal text-muted" style="text-align:center;font-size:var(--small-size);margin-bottom:clamp(0.6rem,1.2vw,1rem);">你说："帮我把这个营销方案做成网页"</p>
+    <div class="two-col reveal-scale" style="max-width:min(95vw,60rem);margin-left:auto;margin-right:auto;">
+      <div class="card compare-left" style="padding:clamp(0.8rem,1.5vw,1.2rem);">
+        <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:clamp(0.5rem,1vw,0.8rem);">
+          <span style="font-size:clamp(1.2rem,2vw,1.6rem);">&#x1F4AC;</span>
+          <h3 style="color:var(--text-muted);margin:0;">ChatGPT</h3>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:0.4rem;font-size:clamp(0.7rem,1.1vw,0.85rem);">
+          <p style="color:var(--text-secondary);padding:0.4rem 0.6rem;background:rgba(255,255,255,0.03);border-radius:6px;">&#x2715; "好的，以下是 HTML 代码"</p>
+          <p style="color:var(--text-secondary);padding:0.4rem 0.6rem;background:rgba(255,255,255,0.03);border-radius:6px;">&#x2715; 你得自己建文件、粘贴代码</p>
+          <p style="color:var(--text-secondary);padding:0.4rem 0.6rem;background:rgba(255,255,255,0.03);border-radius:6px;">&#x2715; 出错了不知道怎么修</p>
+          <p style="color:var(--text-muted);font-weight:600;text-align:center;padding-top:0.4rem;border-top:1px solid rgba(255,255,255,0.06);">
+            最终：一段你不知道怎么用的代码
           </p>
         </div>
       </div>
-      <div class="vs-badge" style="width:clamp(2rem,3vw,2.8rem);height:clamp(2rem,3vw,2.8rem);font-size:clamp(0.55rem,0.8vw,0.7rem);">VS</div>
-      <div class="card compare-right" style="padding:clamp(1rem,2vw,1.5rem);text-align:left;">
-        <h3 style="color:var(--purple-light);margin-bottom:0.8rem;">&#x2713; Claude Code</h3>
-        <div style="display:flex;flex-direction:column;gap:0.5rem;align-items:flex-start;">
-          <p style="color:var(--text-primary);">直接在电脑上读写文件、运行命令</p>
-          <p style="color:var(--text-primary);">自动创建项目、运行、部署</p>
-          <p style="color:var(--text-primary);">动手执行，不只是给建议</p>
-          <p style="color:var(--text-primary);">理解整个项目结构和上下文</p>
-          <p style="color:var(--gold);font-weight:600;border-top:1px solid rgba(124,58,237,0.25);padding-top:0.6rem;">
-            &#x2728; 产出：一个能跑的应用
+      <div class="card compare-right" style="padding:clamp(0.8rem,1.5vw,1.2rem);">
+        <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:clamp(0.5rem,1vw,0.8rem);">
+          <span style="font-size:clamp(1.2rem,2vw,1.6rem);">&#x26A1;</span>
+          <h3 style="color:var(--purple-light);margin:0;">Claude Code</h3>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:0.4rem;font-size:clamp(0.7rem,1.1vw,0.85rem);">
+          <p style="color:var(--text-primary);padding:0.4rem 0.6rem;background:rgba(124,58,237,0.06);border-radius:6px;">&#x2713; 自动建好文件、写好代码</p>
+          <p style="color:var(--text-primary);padding:0.4rem 0.6rem;background:rgba(124,58,237,0.06);border-radius:6px;">&#x2713; 直接运行，浏览器自动打开</p>
+          <p style="color:var(--text-primary);padding:0.4rem 0.6rem;background:rgba(124,58,237,0.06);border-radius:6px;">&#x2713; 出错了它自己修</p>
+          <p style="color:var(--gold);font-weight:600;text-align:center;padding-top:0.4rem;border-top:1px solid rgba(124,58,237,0.15);">
+            &#x2728; 最终：一个打开就能用的网页
           </p>
         </div>
       </div>
     </div>
-    <p class="reveal text-gold" style="text-align:center;margin-top:var(--content-gap);font-size:var(--small-size);">
-      一句话：Chat AI 给你菜谱，Claude Code 帮你把菜做好端上桌 &#x1F37D;&#xFE0F;
+    <p class="reveal" style="text-align:center;margin-top:clamp(0.5rem,1vw,0.8rem);font-size:clamp(0.65rem,1vw,0.8rem);color:var(--text-muted);">
+      区别不是"谁更聪明"，而是"谁能帮你把事做完"
     </p>
   </div>
   <div class="slide-num">09</div>
@@ -1743,6 +1744,9 @@ p, li {
     <div class="two-col reveal" style="margin-top:var(--content-gap);">
       <!-- Project 1: Copy Generator -->
       <div style="display:flex;flex-direction:column;gap:0.6rem;">
+        <a href="http://localhost:8501/" target="_blank" style="display:inline-flex;align-items:center;gap:0.5rem;padding:clamp(0.4rem,0.8vw,0.6rem) clamp(0.8rem,1.2vw,1rem);background:rgba(124,58,237,0.18);border:1.5px solid rgba(124,58,237,0.4);border-radius:10px;color:var(--purple-light);font-size:clamp(0.75rem,1vw,0.9rem);font-weight:600;text-decoration:none;align-self:flex-start;cursor:pointer;">
+          &#x1F517; 点击打开文案生成器 &#x2192;
+        </a>
         <div class="card" style="border-top:3px solid var(--purple);padding:0;overflow:hidden;">
           <div style="background:var(--purple);padding:clamp(0.6rem,1.2vw,1rem) clamp(1rem,2vw,1.5rem);">
             <h3 style="color:#fff;font-size:var(--h3-size);">&#x1F4E2; 营销文案生成器</h3>
@@ -1781,6 +1785,9 @@ p, li {
       </div>
       <!-- Project 2: Publishing Hub -->
       <div style="display:flex;flex-direction:column;gap:0.6rem;">
+        <a href="http://localhost:5173/#/" target="_blank" style="display:inline-flex;align-items:center;gap:0.5rem;padding:clamp(0.4rem,0.8vw,0.6rem) clamp(0.8rem,1.2vw,1rem);background:rgba(6,182,212,0.18);border:1.5px solid rgba(6,182,212,0.4);border-radius:10px;color:var(--cyan);font-size:clamp(0.75rem,1vw,0.9rem);font-weight:600;text-decoration:none;align-self:flex-start;cursor:pointer;">
+          &#x1F517; 点击打开发布中心 &#x2192;
+        </a>
         <div class="card" style="border-top:3px solid var(--cyan);padding:0;overflow:hidden;">
           <div style="background:var(--cyan);padding:clamp(0.6rem,1.2vw,1rem) clamp(1rem,2vw,1.5rem);">
             <h3 style="color:#fff;font-size:var(--h3-size);">&#x1F680; 社交发布中心</h3>
