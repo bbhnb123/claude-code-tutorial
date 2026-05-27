@@ -2468,57 +2468,47 @@ p, li {
      ========================================== -->
 <section class="slide">
   <div style="position:absolute;inset:0;z-index:0;opacity:0.06;"><img src="assets/workspace-org.jpg" alt="" style="width:100%;height:100%;object-fit:cover;"></div>
-  <div class="deco-circle deco-circle-gold" style="width:220px;height:220px;top:5%;right:-40px;"></div>
-  <div class="deco-circle deco-circle-purple" style="width:180px;height:180px;bottom:5%;left:-40px;"></div>
   <div class="slide-label">Cheat Sheet</div>
   <div class="slide-content">
-    <h2 class="reveal-scale" style="margin-bottom:0.5rem;">附录 — 安装速查卡片</h2>
+    <h2 class="reveal-scale" style="margin-bottom:0.3rem;">附录 — 安装速查</h2>
     <div class="divider reveal-scale"></div>
-    <p class="reveal" style="text-align:center;font-size:var(--small-size);color:var(--text-muted);margin-bottom:var(--content-gap);">
-      &#x1F4F8; 截图保存这一页，安装时对照着来
-    </p>
-    <div class="grid-2 grid-stagger" style="margin-top:0.3rem;">
-      <div class="card reveal" style="border-top:3px solid var(--green);">
-        <h3 style="margin-bottom:0.5rem;color:var(--green);">&#x2705; 安装清单</h3>
-        <div style="display:flex;flex-direction:column;gap:0.3rem;font-size:var(--small-size);">
-          <div style="color:var(--text-secondary);">&#x25A2; Node.js — nodejs.org (下载 LTS)</div>
-          <div style="color:var(--text-secondary);">&#x25A2; Git — git-scm.com (默认安装)</div>
-          <div style="color:var(--text-secondary);">&#x25A2; VS Code — code.visualstudio.com</div>
-          <div style="color:var(--text-secondary);">&#x25A2; VS Code 插件：Claude Code + 中文包</div>
-          <div style="color:var(--text-secondary);">&#x25A2; DeepSeek API Key — platform.deepseek.com</div>
-          <div style="color:var(--text-secondary);">&#x25A2; CC Switch 配置启用</div>
+    <div class="grid-2 grid-stagger" style="margin-top:clamp(0.3rem,0.8vw,0.6rem);">
+      <div class="card reveal" style="border-top:3px solid var(--green);padding:clamp(0.6rem,1vw,0.8rem);">
+        <h3 style="margin-bottom:0.3rem;color:var(--green);font-size:clamp(0.8rem,1.2vw,1rem);">&#x2705; 安装清单</h3>
+        <div style="display:flex;flex-direction:column;gap:0.15rem;font-size:clamp(0.6rem,0.9vw,0.75rem);">
+          <div style="color:var(--text-secondary);">&#x25A2; Node.js — nodejs.org (LTS)</div>
+          <div style="color:var(--text-secondary);">&#x25A2; Git — git-scm.com</div>
+          <div style="color:var(--text-secondary);">&#x25A2; VS Code + Claude Code 插件 + 中文包</div>
+          <div style="color:var(--text-secondary);">&#x25A2; DeepSeek API — platform.deepseek.com</div>
         </div>
       </div>
-      <div class="card reveal" style="border-top:3px solid var(--purple);">
-        <h3 style="margin-bottom:0.5rem;color:var(--purple-light);">&#x2328; 关键命令</h3>
-        <div class="code-block" style="font-size:var(--small-size);margin-bottom:0;">
+      <div class="card reveal" style="border-top:3px solid var(--purple);padding:clamp(0.6rem,1vw,0.8rem);">
+        <h3 style="margin-bottom:0.3rem;color:var(--purple-light);font-size:clamp(0.8rem,1.2vw,1rem);">&#x2328; 关键命令</h3>
+        <div class="code-block" style="font-size:clamp(0.55rem,0.85vw,0.7rem);margin-bottom:0;padding:0.5rem;">
           <div>npm install -g @anthropic-ai/claude-code</div>
-          <div style="color:var(--text-muted);margin-top:0.3rem;">claude --version</div>
-          <div style="color:var(--text-muted);margin-top:0.3rem;"># 遇到脚本禁止错误：</div>
-          <div style="color:var(--text-muted);">Set-ExecutionPolicy RemoteSigned -Scope CurrentUser</div>
+          <div style="color:var(--text-muted);margin-top:0.2rem;"># 脚本禁止错误：</div>
+          <div style="color:var(--text-muted);">Set-ExecutionPolicy RemoteSigned</div>
         </div>
       </div>
-      <div class="card reveal" style="border-top:3px solid var(--gold);">
-        <h3 style="margin-bottom:0.5rem;color:var(--gold);">&#x1F517; 重要链接</h3>
-        <div style="display:flex;flex-direction:column;gap:0.3rem;font-size:var(--small-size);">
-          <div style="color:var(--text-secondary);">API配置：platform.deepseek.com</div>
+      <div class="card reveal" style="border-top:3px solid var(--gold);padding:clamp(0.6rem,1vw,0.8rem);">
+        <h3 style="margin-bottom:0.3rem;color:var(--gold);font-size:clamp(0.8rem,1.2vw,1rem);">&#x1F517; 重要链接</h3>
+        <div style="display:flex;flex-direction:column;gap:0.15rem;font-size:clamp(0.6rem,0.9vw,0.75rem);">
           <div style="color:var(--text-secondary);">CC Switch：github.com/farion1231/cc-switch</div>
           <div style="color:var(--text-secondary);">Skills：github.com/alirezarezvani/claude-skills</div>
-          <div style="color:var(--text-secondary);">DeepSeek API 文档：api-docs.deepseek.com</div>
+          <div style="color:var(--text-secondary);">DeepSeek API：api-docs.deepseek.com</div>
         </div>
       </div>
-      <div class="card reveal" style="border-top:3px solid var(--cyan);">
-        <h3 style="margin-bottom:0.5rem;color:var(--cyan);">&#x1F6D1; 常见问题速查</h3>
-        <div style="display:flex;flex-direction:column;gap:0.3rem;font-size:var(--small-size);">
-          <div style="color:var(--text-secondary);"><strong>node 不识别？</strong> 检查环境变量 Path</div>
-          <div style="color:var(--text-secondary);"><strong>禁止运行脚本？</strong> 管理员运行 Set-ExecutionPolicy</div>
-          <div style="color:var(--text-secondary);"><strong>CC Switch 启动不了？</strong> 右键管理员运行</div>
-          <div style="color:var(--text-secondary);"><strong>API Key 无效？</strong> 检查余额和 Base URL</div>
+      <div class="card reveal" style="border-top:3px solid var(--cyan);padding:clamp(0.6rem,1vw,0.8rem);">
+        <h3 style="margin-bottom:0.3rem;color:var(--cyan);font-size:clamp(0.8rem,1.2vw,1rem);">&#x1F6D1; 常见问题</h3>
+        <div style="display:flex;flex-direction:column;gap:0.15rem;font-size:clamp(0.6rem,0.9vw,0.75rem);">
+          <div style="color:var(--text-secondary);"><strong>node不识别？</strong> 检查环境变量Path</div>
+          <div style="color:var(--text-secondary);"><strong>禁止运行脚本？</strong> 管理员运行命令</div>
+          <div style="color:var(--text-secondary);"><strong>API Key无效？</strong> 检查余额和Base URL</div>
         </div>
       </div>
     </div>
-    <p class="reveal text-gold" style="text-align:center;margin-top:var(--content-gap);font-weight:700;font-size:var(--small-size);">
-      &#x1F4AC; 还有问题？打开 Claude Code 直接问它——它是最好的故障排除专家
+    <p class="reveal text-gold" style="text-align:center;margin-top:clamp(0.3rem,0.8vw,0.5rem);font-weight:700;font-size:clamp(0.6rem,0.9vw,0.75rem);">
+      &#x1F4AC; 有问题？打开 Claude Code 直接问它
     </p>
   </div>
   <div class="slide-num">27</div>
