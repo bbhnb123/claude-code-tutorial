@@ -2673,3 +2673,2678 @@ document.addEventListener("DOMContentLoaded", () => { new SlidePresentation(); }
 
 </body>
 </html>
+ html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI时代的营销新武器 — Claude Code 入门分享</title>
+
+<!-- Fonts: Noto Sans SC for Chinese, Syne for English display -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+
+<style>
+/* ===========================================
+   CSS CUSTOM PROPERTIES (THEME)
+   =========================================== */
+:root {
+  --bg-primary: #0f0f23;
+  --bg-secondary: #1a1a2e;
+  --bg-card: rgba(255, 255, 255, 0.06);
+  --bg-card-hover: rgba(255, 255, 255, 0.1);
+  --purple: #7c3aed;
+  --purple-light: #a855f7;
+  --purple-glow: rgba(124, 58, 237, 0.4);
+  --gold: #f59e0b;
+  --gold-glow: rgba(245, 158, 11, 0.3);
+  --green: #10b981;
+  --cyan: #06b6d4;
+  --pink: #ec4899;
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.7);
+  --text-muted: rgba(255, 255, 255, 0.45);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+
+  --font-display: "Syne", "Noto Sans SC", sans-serif;
+  --font-body: "Noto Sans SC", sans-serif;
+  --title-size: clamp(2rem, 6vw, 4.5rem);
+  --h2-size: clamp(1.5rem, 4vw, 2.8rem);
+  --h3-size: clamp(1.1rem, 2.5vw, 1.5rem);
+  --body-size: clamp(0.8rem, 1.5vw, 1.1rem);
+  --small-size: clamp(0.65rem, 1vw, 0.85rem);
+
+  --slide-padding: clamp(2rem, 5vw, 5rem);
+  --content-gap: clamp(1rem, 2vw, 2.5rem);
+  --element-gap: clamp(0.3rem, 1vw, 0.8rem);
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-normal: 0.7s;
+}
+
+/* ===========================================
+   BASE STYLES
+   =========================================== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  overflow-x: hidden;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+}
+
+html {
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+}
+
+.slide {
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.slide-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-height: 100%;
+  overflow: hidden;
+  padding: var(--slide-padding);
+  z-index: 1;
+}
+
+/* ===========================================
+   BACKGROUND EFFECTS
+   =========================================== */
+.slide::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 15% 80%, rgba(124, 58, 237, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 85% 20%, rgba(168, 85, 247, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.slide-dark::before {
+  background:
+    radial-gradient(ellipse at 10% 90%, rgba(124, 58, 237, 0.2) 0%, transparent 40%),
+    radial-gradient(ellipse at 90% 10%, rgba(245, 158, 11, 0.08) 0%, transparent 40%);
+}
+
+.slide::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ===========================================
+   TYPOGRAPHY
+   =========================================== */
+h1 {
+  font-family: var(--font-display);
+  font-size: var(--title-size);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  font-family: var(--font-body);
+  font-size: var(--h2-size);
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+h3 {
+  font-family: var(--font-body);
+  font-size: var(--h3-size);
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+p, li {
+  font-size: var(--body-size);
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.text-gold { color: var(--gold); }
+.text-purple { color: var(--purple-light); }
+.text-muted { color: var(--text-muted); }
+
+/* ===========================================
+   CARDS
+   =========================================== */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 20px;
+  padding: clamp(1.2rem, 2.5vw, 2rem);
+  backdrop-filter: blur(10px);
+  transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  background: var(--bg-card-hover);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(124, 58, 237, 0.2);
+}
+
+/* ===========================================
+   GRIDS
+   =========================================== */
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: clamp(1rem, 2vw, 2rem);
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(1rem, 2vw, 2rem);
+}
+
+.grid-5 {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: clamp(0.8rem, 1.5vw, 1.5rem);
+}
+
+/* ===========================================
+   BADGES
+   =========================================== */
+.badge {
+  display: inline-block;
+  padding: 0.3em 0.8em;
+  border-radius: 999px;
+  font-size: var(--small-size);
+  font-weight: 500;
+}
+
+.badge-purple {
+  background: rgba(124, 58, 237, 0.2);
+  color: var(--purple-light);
+  border: 1px solid rgba(124, 58, 237, 0.3);
+}
+
+.badge-gold {
+  background: rgba(245, 158, 11, 0.2);
+  color: var(--gold);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.badge-green {
+  background: rgba(16, 185, 129, 0.2);
+  color: var(--green);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+/* ===========================================
+   COMPARISON
+   =========================================== */
+.compare-left {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.compare-right {
+  background: rgba(124, 58, 237, 0.08);
+  border: 1px solid rgba(124, 58, 237, 0.2);
+}
+
+/* ===========================================
+   STEP FLOW + TIMELINE CONNECTORS
+   =========================================== */
+.step-flow {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.4rem, 0.8vw, 0.6rem);
+  position: relative;
+}
+
+.step-flow::before {
+  content: "";
+  position: absolute;
+  left: calc(clamp(2rem, 3vw, 2.5rem) / 2);
+  top: clamp(2rem, 3vw, 2.5rem);
+  bottom: clamp(1rem, 2vw, 1.5rem);
+  width: 2px;
+  background: linear-gradient(to bottom, var(--purple), var(--cyan), var(--green));
+  z-index: 0;
+}
+
+.step-item {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.6rem, 1.2vw, 1rem);
+  position: relative;
+  z-index: 1;
+}
+
+.step-num {
+  width: clamp(2rem, 3vw, 2.5rem);
+  height: clamp(2rem, 3vw, 2.5rem);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: var(--small-size);
+  flex-shrink: 0;
+  box-shadow: 0 0 15px rgba(0,0,0,0.3);
+}
+
+.step-arrow {
+  color: var(--purple-light);
+  font-size: var(--h3-size);
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+
+/* ===========================================
+   QUOTE
+   =========================================== */
+.quote {
+  position: relative;
+  padding-left: clamp(1rem, 2vw, 1.5rem);
+  border-left: 3px solid var(--gold);
+  font-style: italic;
+  color: var(--gold);
+  font-size: var(--body-size);
+}
+
+/* ===========================================
+   ANIMATIONS — 6 distinct reveal variants
+   =========================================== */
+
+/* 1. Fade + Slide Up (default, most versatile) */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 1.2s var(--ease-out-expo),
+              transform 1.2s var(--ease-out-expo),
+              filter 1.2s var(--ease-out-expo);
+}
+
+/* 2. Scale In — for hero elements and images */
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.88);
+  transition: opacity 1.4s var(--ease-out-expo),
+              transform 1.4s var(--ease-out-expo),
+              filter 1.4s var(--ease-out-expo);
+}
+
+/* 3. Slide from Left — for alternating cards */
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-50px);
+  transition: opacity 1.1s var(--ease-out-expo),
+              transform 1.1s var(--ease-out-expo),
+              filter 1.1s var(--ease-out-expo);
+}
+
+/* 4. Slide from Right — for alternating cards */
+.reveal-right {
+  opacity: 0;
+  transform: translateX(50px);
+  transition: opacity 1.1s var(--ease-out-expo),
+              transform 1.1s var(--ease-out-expo),
+              filter 1.1s var(--ease-out-expo);
+}
+
+/* 5. Blur In — for quotes, key statements, photos */
+.reveal-blur {
+  opacity: 0;
+  filter: blur(12px);
+  transition: opacity 1.5s var(--ease-out-expo),
+              filter 1.5s var(--ease-out-expo),
+              transform 1.5s var(--ease-out-expo);
+}
+
+/* 6. Bounce In — for cards, icons, playful elements */
+@keyframes bounce-in {
+  0%   { opacity: 0; transform: scale(0.5); }
+  50%  { opacity: 1; transform: scale(1.05); }
+  70%  { opacity: 1; transform: scale(0.95); }
+  100% { opacity: 1; transform: scale(1); }
+}
+.reveal-bounce {
+  opacity: 0;
+  transform: scale(0.5);
+}
+.slide.visible .reveal-bounce {
+  animation: bounce-in 1.1s var(--ease-out-expo) forwards;
+  opacity: 1;
+}
+
+/* === Trigger all reveal types on visible slide === */
+.slide.visible .reveal {
+  opacity: 1; transform: translateY(0);
+}
+.slide.visible .reveal-scale {
+  opacity: 1; transform: scale(1);
+}
+.slide.visible .reveal-left {
+  opacity: 1; transform: translateX(0);
+}
+.slide.visible .reveal-right {
+  opacity: 1; transform: translateX(0);
+}
+.slide.visible .reveal-blur {
+  opacity: 1; filter: blur(0);
+}
+
+/* === Stagger delays: nth-child gives sequential cascade === */
+.reveal:nth-child(1),
+.reveal-scale:nth-child(1),
+.reveal-left:nth-child(1),
+.reveal-right:nth-child(1),
+.reveal-blur:nth-child(1),
+.reveal-bounce:nth-child(1) { transition-delay: 0.15s; animation-delay: 0.15s; }
+
+.reveal:nth-child(2),
+.reveal-scale:nth-child(2),
+.reveal-left:nth-child(2),
+.reveal-right:nth-child(2),
+.reveal-blur:nth-child(2),
+.reveal-bounce:nth-child(2) { transition-delay: 0.30s; animation-delay: 0.30s; }
+
+.reveal:nth-child(3),
+.reveal-scale:nth-child(3),
+.reveal-left:nth-child(3),
+.reveal-right:nth-child(3),
+.reveal-blur:nth-child(3),
+.reveal-bounce:nth-child(3) { transition-delay: 0.45s; animation-delay: 0.45s; }
+
+.reveal:nth-child(4),
+.reveal-scale:nth-child(4),
+.reveal-left:nth-child(4),
+.reveal-right:nth-child(4),
+.reveal-blur:nth-child(4),
+.reveal-bounce:nth-child(4) { transition-delay: 0.60s; animation-delay: 0.60s; }
+
+.reveal:nth-child(5),
+.reveal-scale:nth-child(5),
+.reveal-left:nth-child(5),
+.reveal-right:nth-child(5),
+.reveal-blur:nth-child(5),
+.reveal-bounce:nth-child(5) { transition-delay: 0.75s; animation-delay: 0.75s; }
+
+.reveal:nth-child(6),
+.reveal-scale:nth-child(6),
+.reveal-left:nth-child(6),
+.reveal-right:nth-child(6),
+.reveal-blur:nth-child(6),
+.reveal-bounce:nth-child(6) { transition-delay: 0.90s; animation-delay: 0.90s; }
+
+.reveal:nth-child(7),
+.reveal-scale:nth-child(7),
+.reveal-left:nth-child(7),
+.reveal-right:nth-child(7),
+.reveal-blur:nth-child(7),
+.reveal-bounce:nth-child(7) { transition-delay: 1.05s; animation-delay: 1.05s; }
+
+/* Grid stagger: tighter delays for card grids */
+.grid-stagger .reveal:nth-child(1),
+.grid-stagger .reveal-scale:nth-child(1),
+.grid-stagger .reveal-left:nth-child(1),
+.grid-stagger .reveal-right:nth-child(1),
+.grid-stagger .reveal-blur:nth-child(1),
+.grid-stagger .reveal-bounce:nth-child(1) { transition-delay: 0.10s; animation-delay: 0.10s; }
+
+.grid-stagger .reveal:nth-child(2),
+.grid-stagger .reveal-scale:nth-child(2),
+.grid-stagger .reveal-left:nth-child(2),
+.grid-stagger .reveal-right:nth-child(2),
+.grid-stagger .reveal-blur:nth-child(2),
+.grid-stagger .reveal-bounce:nth-child(2) { transition-delay: 0.25s; animation-delay: 0.25s; }
+
+.grid-stagger .reveal:nth-child(3),
+.grid-stagger .reveal-scale:nth-child(3),
+.grid-stagger .reveal-left:nth-child(3),
+.grid-stagger .reveal-right:nth-child(3),
+.grid-stagger .reveal-blur:nth-child(3),
+.grid-stagger .reveal-bounce:nth-child(3) { transition-delay: 0.40s; animation-delay: 0.40s; }
+
+.grid-stagger .reveal:nth-child(4),
+.grid-stagger .reveal-scale:nth-child(4),
+.grid-stagger .reveal-left:nth-child(4),
+.grid-stagger .reveal-right:nth-child(4),
+.grid-stagger .reveal-blur:nth-child(4),
+.grid-stagger .reveal-bounce:nth-child(4) { transition-delay: 0.55s; animation-delay: 0.55s; }
+
+.grid-stagger .reveal:nth-child(5),
+.grid-stagger .reveal-scale:nth-child(5),
+.grid-stagger .reveal-left:nth-child(5),
+.grid-stagger .reveal-right:nth-child(5),
+.grid-stagger .reveal-blur:nth-child(5),
+.grid-stagger .reveal-bounce:nth-child(5) { transition-delay: 0.70s; animation-delay: 0.70s; }
+
+/* Floating particles animation */
+@keyframes float-up {
+  0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+}
+
+@keyframes float-drift {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  25% { transform: translate(15px, -20px) rotate(5deg); }
+  50% { transform: translate(-10px, -35px) rotate(-3deg); }
+  75% { transform: translate(20px, -15px) rotate(4deg); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px var(--purple-glow); }
+  50% { box-shadow: 0 0 40px var(--purple-glow), 0 0 60px rgba(124, 58, 237, 0.2); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes typing-cursor {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes spin-slow {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  animation: float-up linear infinite;
+}
+
+.floating-shape {
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+  animation: float-drift 8s ease-in-out infinite;
+}
+
+/* Typing cursor */
+.typing-cursor::after {
+  content: "|";
+  animation: typing-cursor 1s step-end infinite;
+  color: var(--gold);
+  margin-left: 2px;
+}
+
+/* Shimmer effect */
+.shimmer {
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.05) 50%, transparent 100%);
+  background-size: 200% 100%;
+  animation: shimmer 3s infinite;
+}
+
+/* Pulse ring */
+.pulse-ring {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+/* ===========================================
+   MOCK TERMINAL / CHAT UI
+   =========================================== */
+.mock-terminal {
+  background: #1e1e2e;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.1);
+  overflow: hidden;
+  font-family: "Cascadia Code", "Fira Code", "JetBrains Mono", monospace;
+  font-size: var(--small-size);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+}
+
+.terminal-bar {
+  background: rgba(255,255,255,0.05);
+  padding: 0.4rem 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.terminal-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.terminal-body {
+  padding: clamp(0.6rem, 1.2vw, 1rem);
+  line-height: 1.8;
+}
+
+.terminal-user {
+  color: var(--cyan);
+}
+
+.terminal-ai {
+  color: var(--green);
+}
+
+.terminal-cmd {
+  color: var(--gold);
+}
+
+.terminal-muted {
+  color: var(--text-muted);
+}
+
+/* Mock Chat Bubbles */
+.chat-bubble {
+  padding: 0.6rem 1rem;
+  border-radius: 16px;
+  max-width: 85%;
+  font-size: var(--small-size);
+  line-height: 1.6;
+  position: relative;
+}
+
+.chat-user {
+  background: rgba(6, 182, 212, 0.15);
+  border: 1px solid rgba(6, 182, 212, 0.25);
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+  color: var(--text-primary);
+}
+
+.chat-ai {
+  background: rgba(124, 58, 237, 0.12);
+  border: 1px solid rgba(124, 58, 237, 0.25);
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+  color: var(--text-secondary);
+}
+
+/* ===========================================
+   MOCK APP UI
+   =========================================== */
+.mock-app {
+  background: #1a1a2e;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.1);
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+}
+
+.mock-app-bar {
+  background: rgba(124, 58, 237, 0.3);
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: var(--small-size);
+  font-weight: 600;
+}
+
+.mock-app-body {
+  padding: clamp(0.6rem, 1vw, 0.8rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.mock-input {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  padding: 0.4rem 0.6rem;
+  color: var(--text-muted);
+  font-size: var(--small-size);
+}
+
+.mock-btn {
+  background: linear-gradient(135deg, var(--purple), var(--purple-light));
+  border: none;
+  border-radius: 8px;
+  padding: 0.4rem 0.8rem;
+  color: #fff;
+  font-size: var(--small-size);
+  font-weight: 600;
+  text-align: center;
+}
+
+.mock-output {
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-radius: 8px;
+  padding: 0.4rem 0.6rem;
+  color: var(--green);
+  font-size: var(--small-size);
+  line-height: 1.6;
+}
+
+/* ===========================================
+   ILLUSTRATION: RECIPE vs DISH
+   =========================================== */
+.recipe-card {
+  background: rgba(255,255,255,0.03);
+  border: 2px dashed rgba(255,255,255,0.15);
+  border-radius: 16px;
+  padding: clamp(1rem, 2vw, 1.5rem);
+  text-align: center;
+  position: relative;
+}
+
+.dish-card {
+  background: linear-gradient(135deg, rgba(124,58,237,0.1), rgba(168,85,247,0.1));
+  border: 2px solid rgba(124,58,237,0.3);
+  border-radius: 16px;
+  padding: clamp(1rem, 2vw, 1.5rem);
+  text-align: center;
+  position: relative;
+  box-shadow: 0 8px 32px rgba(124,58,237,0.2);
+}
+
+.recipe-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: var(--small-size);
+  color: var(--text-muted);
+  text-align: left;
+  margin-top: 0.8rem;
+}
+
+.recipe-steps span {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* ===========================================
+   PROGRESS BAR & NAV
+   =========================================== */
+.progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--purple), var(--gold));
+  z-index: 1000;
+  transition: width 0.3s ease;
+  width: 0%;
+}
+
+.nav-dots {
+  position: fixed;
+  right: clamp(0.8rem, 1.5vw, 1.5rem);
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 100;
+}
+
+.nav-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  padding: 0;
+}
+
+.nav-dot.active {
+  background: var(--purple-light);
+  box-shadow: 0 0 10px var(--purple-glow);
+  transform: scale(1.3);
+}
+
+.nav-dot:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.slide-num {
+  position: absolute;
+  bottom: clamp(0.8rem, 1.5vw, 1.2rem);
+  right: clamp(1rem, 2vw, 1.5rem);
+  font-size: var(--small-size);
+  color: var(--text-muted);
+  font-family: var(--font-display);
+  z-index: 1;
+}
+
+.slide-label {
+  position: absolute;
+  top: clamp(0.8rem, 1.5vw, 1.2rem);
+  left: clamp(1rem, 2vw, 1.5rem);
+  font-size: clamp(0.55rem, 0.8vw, 0.7rem);
+  color: var(--purple-light);
+  font-family: var(--font-body);
+  font-weight: 600;
+  z-index: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.5;
+  padding: 0.25em 0.6em;
+  background: rgba(124,58,237,0.08);
+  border-radius: 6px;
+}
+
+.keyboard-hint {
+  position: fixed;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: var(--small-size);
+  color: var(--text-muted);
+  z-index: 100;
+  opacity: 1;
+  transition: opacity 0.5s ease;
+}
+
+.keyboard-hint.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.keyboard-hint kbd {
+  display: inline-block;
+  padding: 0.1em 0.4em;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 0.9em;
+}
+
+/* ===========================================
+   SPECIAL ELEMENTS
+   =========================================== */
+.deco-circle {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.deco-circle-purple {
+  background: radial-gradient(circle, rgba(124, 58, 237, 0.15), transparent 70%);
+}
+
+.deco-circle-gold {
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.1), transparent 70%);
+}
+
+.icon-circle {
+  width: clamp(2.5rem, 4vw, 3.5rem);
+  height: clamp(2.5rem, 4vw, 3.5rem);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(1rem, 2vw, 1.4rem);
+  flex-shrink: 0;
+}
+
+.divider {
+  width: clamp(2rem, 4vw, 3rem);
+  height: 3px;
+  background: linear-gradient(90deg, var(--purple), var(--gold));
+  border-radius: 2px;
+  margin: clamp(0.5rem, 1vw, 1rem) 0;
+}
+
+.cta-bar {
+  background: rgba(124, 58, 237, 0.1);
+  border: 1px solid rgba(124, 58, 237, 0.2);
+  border-radius: 12px;
+  padding: clamp(0.6rem, 1.2vw, 1rem) clamp(1rem, 2vw, 1.5rem);
+  text-align: center;
+  font-weight: 500;
+}
+
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(1.5rem, 3vw, 3rem);
+  align-items: start;
+}
+
+.vs-badge {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: clamp(2.5rem, 4vw, 3.5rem);
+  height: clamp(2.5rem, 4vw, 3.5rem);
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--purple), var(--purple-light));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: var(--small-size);
+  z-index: 10;
+  box-shadow: 0 0 20px var(--purple-glow);
+}
+
+.code-block {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: clamp(0.5rem, 1vw, 0.8rem);
+  font-family: "Cascadia Code", "Fira Code", monospace;
+  font-size: var(--small-size);
+  color: var(--green);
+  overflow-x: auto;
+}
+
+.tool-logo {
+  width: clamp(2rem, 3vw, 2.8rem);
+  height: clamp(2rem, 3vw, 2.8rem);
+  object-fit: contain;
+  margin-bottom: 0.5rem;
+  filter: brightness(0) invert(1);
+  opacity: 0.9;
+}
+
+.tool-highlight {
+  position: relative;
+  background: rgba(124, 58, 237, 0.1);
+  border: 1.5px solid var(--purple);
+}
+
+.tool-highlight::before {
+  content: "\2B50 \63A8\8350";
+  position: absolute;
+  top: -0.6em;
+  right: 0.8em;
+  background: var(--gold);
+  color: #000;
+  font-size: 0.7em;
+  font-weight: 700;
+  padding: 0.2em 0.6em;
+  border-radius: 4px;
+}
+
+/* Stat callout */
+.stat-number {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 800;
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: var(--small-size);
+  color: var(--text-muted);
+  margin-top: 0.2rem;
+}
+
+/* Decorative ring */
+.deco-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid rgba(124, 58, 237, 0.15);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Feature tag */
+.feature-tag {
+  display: inline-block;
+  padding: 0.15em 0.5em;
+  border-radius: 6px;
+  font-size: clamp(0.55rem, 0.8vw, 0.7rem);
+  font-weight: 600;
+  margin: 0.1rem;
+}
+
+/* ===========================================
+   REAL PHOTO IMAGES
+   =========================================== */
+.photo-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  opacity: 0.35;
+}
+
+.photo-bg-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(135deg, rgba(15,15,35,0.85) 0%, rgba(15,15,35,0.5) 50%, rgba(15,15,35,0.8) 100%);
+  pointer-events: none;
+}
+
+.photo-card {
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+}
+
+.photo-card img {
+  width: 100%;
+  height: clamp(10rem, 25vw, 18rem);
+  object-fit: cover;
+  display: block;
+}
+
+.photo-card .photo-label {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: clamp(0.4rem, 1vw, 0.7rem);
+  background: linear-gradient(transparent, rgba(0,0,0,0.7));
+  color: #fff;
+  font-size: var(--small-size);
+  font-weight: 600;
+  text-align: center;
+}
+
+.photo-side {
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+}
+
+.photo-side img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ===========================================
+   RESPONSIVE BREAKPOINTS
+   =========================================== */
+@media (max-height: 700px) {
+  :root {
+    --slide-padding: clamp(0.75rem, 3vw, 2rem);
+    --content-gap: clamp(0.4rem, 1.5vw, 1rem);
+    --title-size: clamp(1.5rem, 5vw, 3rem);
+    --h2-size: clamp(1.2rem, 3.5vw, 2rem);
+  }
+}
+
+@media (max-height: 600px) {
+  :root {
+    --slide-padding: clamp(0.5rem, 2.5vw, 1.5rem);
+    --content-gap: clamp(0.3rem, 1vw, 0.75rem);
+    --title-size: clamp(1.2rem, 4vw, 2rem);
+    --body-size: clamp(0.7rem, 1.2vw, 0.95rem);
+  }
+  .nav-dots, .keyboard-hint { display: none; }
+}
+
+@media (max-height: 500px) {
+  :root {
+    --slide-padding: clamp(0.4rem, 2vw, 1rem);
+    --title-size: clamp(1rem, 3.5vw, 1.5rem);
+    --h2-size: clamp(0.9rem, 2.5vw, 1.25rem);
+    --body-size: clamp(0.65rem, 1vw, 0.85rem);
+  }
+}
+
+@media (max-width: 768px) {
+  .grid-2, .grid-3, .grid-5 { grid-template-columns: 1fr; }
+  .grid-5 { grid-template-columns: repeat(2, 1fr); }
+  .nav-dots { display: none; }
+  .two-col { grid-template-columns: 1fr; }
+  .vs-badge { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.2s !important;
+  }
+  html { scroll-behavior: auto; }
+  .particle, .floating-shape { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- Progress bar -->
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- Navigation dots -->
+<nav class="nav-dots" id="navDots"></nav>
+
+<!-- Keyboard hint -->
+<div class="keyboard-hint" id="keyboardHint">
+  <kbd>&#8593;</kbd> <kbd>&#8595;</kbd> 或 <kbd>Space</kbd> 翻页 &nbsp;|&nbsp; <kbd>&#8592;</kbd> <kbd>&#8594;</kbd> 切换
+</div>
+
+<!-- ==========================================
+         SLIDE 1: COVER (with animated particles)
+     ========================================== -->
+<section class="slide slide-dark" style="overflow:hidden;">
+  <!-- Full background image -->
+  <img class="photo-bg" src="assets/ai-bg.jpg" alt="AI Technology" style="opacity:0.3;">
+  <div class="photo-bg-overlay"></div>
+  <!-- Decorative circles -->
+  <div class="deco-circle deco-circle-purple" style="width:500px;height:500px;top:-150px;right:-100px;"></div>
+  <div class="deco-circle deco-circle-gold" style="width:350px;height:350px;bottom:-100px;left:-80px;"></div>
+  <!-- Decorative rings -->
+  <div class="deco-ring" style="width:200px;height:200px;top:15%;right:12%;border-color:rgba(124,58,237,0.12);"></div>
+  <div class="deco-ring" style="width:120px;height:120px;bottom:20%;left:10%;border-color:rgba(245,158,11,0.1);"></div>
+  <!-- Animated floating shapes -->
+  <div class="floating-shape" style="top:10%;left:8%;animation-delay:0s;">
+    <svg width="40" height="40" viewBox="0 0 40 40"><polygon points="20,2 38,14 32,36 8,36 2,14" fill="none" stroke="rgba(124,58,237,0.25)" stroke-width="1.5"/></svg>
+  </div>
+  <div class="floating-shape" style="top:25%;right:15%;animation-delay:2s;">
+    <svg width="30" height="30" viewBox="0 0 30 30"><rect x="5" y="5" width="20" height="20" rx="3" fill="none" stroke="rgba(245,158,11,0.2)" stroke-width="1.5" transform="rotate(45 15 15)"/></svg>
+  </div>
+  <div class="floating-shape" style="bottom:25%;right:25%;animation-delay:4s;">
+    <svg width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="rgba(16,185,129,0.2)" stroke-width="1.5"/></svg>
+  </div>
+  <div class="floating-shape" style="bottom:15%;left:20%;animation-delay:1s;">
+    <svg width="28" height="28" viewBox="0 0 28 28"><polygon points="14,2 26,14 14,26 2,14" fill="none" stroke="rgba(124,58,237,0.2)" stroke-width="1.5"/></svg>
+  </div>
+  <!-- Floating dots -->
+  <div class="floating-shape" style="top:40%;left:5%;animation-delay:3s;width:6px;height:6px;border-radius:50%;background:rgba(124,58,237,0.3);"></div>
+  <div class="floating-shape" style="top:60%;right:8%;animation-delay:1.5s;width:8px;height:8px;border-radius:50%;background:rgba(245,158,11,0.25);"></div>
+  <div class="floating-shape" style="top:20%;left:35%;animation-delay:5s;width:5px;height:5px;border-radius:50%;background:rgba(6,182,212,0.3);"></div>
+
+  <div class="slide-content" style="justify-content:center;align-items:center;text-align:center;">
+    <h1 class="reveal-blur reveal-scale" style="background:linear-gradient(135deg,#fff 0%,var(--purple-light) 50%,var(--gold) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;max-width:90vw;">
+      AI时代的营销新武器
+    </h1>
+    <div class="divider reveal-blur" style="margin:clamp(0.8rem,2vw,1.5rem) auto;"></div>
+    <p class="reveal" style="font-size:clamp(1rem,2.5vw,1.5rem);font-weight:500;color:var(--text-secondary);">
+      Claude Code 入门分享
+    </p>
+    <p class="reveal" style="margin-top:clamp(2rem,4vw,3rem);font-size:var(--small-size);color:var(--text-muted);letter-spacing:0.15em;">
+      面向市场营销专业的 AI 工具实战分享
+    </p>
+  </div>
+  <div class="slide-num">01</div>
+</section>
+<!-- ==========================================
+         SLIDE 2: VIBE CODING CONCEPT (NEW)
+     ========================================== -->
+<section class="slide">
+  <div style="position:absolute;inset:0;z-index:0;opacity:0.08;"><img src="assets/tech-abstract.jpg" alt="" style="width:100%;height:100%;object-fit:cover;"></div>
+  <div class="deco-circle deco-circle-purple" style="width:350px;height:350px;top:-60px;right:-60px;"></div>
+  <div class="deco-ring" style="width:120px;height:120px;bottom:12%;left:8%;border-color:rgba(124,58,237,0.12);animation:spin-slow 18s linear infinite;"></div>
+  <!-- Vibe wave illustration -->
+  <div class="floating-shape" style="top:15%;right:12%;animation-delay:0.5s;">
+    <svg width="80" height="80" viewBox="0 0 80 80">
+      <circle cx="40" cy="40" r="30" fill="none" stroke="rgba(168,85,247,0.2)" stroke-width="1.5"/>
+      <circle cx="40" cy="40" r="18" fill="none" stroke="rgba(245,158,11,0.15)" stroke-width="1"/>
+      <circle cx="40" cy="40" r="6" fill="rgba(124,58,237,0.3)"/>
+    </svg>
+  </div>
+  <div class="floating-shape" style="bottom:18%;left:15%;animation-delay:2s;">
+    <svg width="50" height="50" viewBox="0 0 50 50">
+      <path d="M10 40 Q25 5 40 40" fill="none" stroke="rgba(245,158,11,0.12)" stroke-width="1.5"/>
+      <circle cx="10" cy="40" r="3" fill="rgba(245,158,11,0.2)"/>
+      <circle cx="25" cy="22" r="3" fill="rgba(245,158,11,0.2)"/>
+      <circle cx="40" cy="40" r="3" fill="rgba(245,158,11,0.2)"/>
+    </svg>
+  </div>
+  <div class="slide-label">New Trend</div>
+  <div class="deco-circle deco-circle-purple" style="width:250px;height:250px;top:10%;right:5%;"></div>
+  <div class="slide-content" style="justify-content:center;align-items:center;text-align:center;">
+    <h2 class="reveal-blur" style="margin-bottom:0.3rem;">你听说过 Vibe Coding 吗？</h2>
+    <div class="divider reveal-blur" style="margin:0 auto var(--content-gap);"></div>
+    <p class="reveal-scale" style="font-size:clamp(1rem,2.5vw,1.5rem);color:var(--purple-light);font-weight:700;margin-bottom:var(--content-gap);">
+      "Vibe Coding" — 用感觉编程，而不是用代码
+    </p>
+    <div class="reveal-left" style="max-width:min(90vw,40rem);margin:0 auto;text-align:left;">
+      <p style="font-size:var(--body-size);line-height:1.8;margin-bottom:0.8rem;">
+        这个新概念正在席卷全球。前特斯拉 AI 总监 Andrej Karpathy 这样描述它：
+      </p>
+      <div class="quote" style="margin-bottom:0.8rem;">
+        "我完全沉浸在感觉中，拥抱技术的便利。我不去理解代码，只是大概看一看，然后说'好像不太对，全改掉'——如此反复三四次，东西就做出来了。"
+      </div>
+      <p style="font-size:var(--body-size);line-height:1.8;color:var(--text-secondary);">
+        翻译一下就是：<strong style="color:var(--text-primary);">你不需要看懂代码，你只需要感觉。</strong>就像你不需要懂内燃机原理就能开车——你需要的是方向感和判断力，而不是机械知识。
+      </p>
+    </div>
+    <p class="reveal text-gold" style="margin-top:var(--content-gap);font-size:var(--h3-size);font-weight:700;">
+      Claude Code，就是你的 Vibe Coding 座驾 &#x1F3CE;
+    </p>
+  </div>
+  <div class="slide-num">02</div>
+</section>
+
+
+<!-- ==========================================
+         SLIDE 3: WHAT YOU'LL LEARN
+     ========================================== -->
+<section class="slide">
+  <div class="slide-label">Agenda</div>
+  <div class="slide-content">
+    <h2 class="reveal-scale" style="margin-bottom:var(--content-gap);">今天你会收获什么</h2>
+    <div class="divider reveal"></div>
+    <div class="grid-2 grid-stagger" style="margin-top:var(--content-gap);">
+      <div class="card reveal-bounce" style="border-top:3px solid var(--purple);">
+        <div style="display:flex;align-items:center;gap:0.8rem;margin-bottom:0.6rem;">
+          <div class="icon-circle" style="background:rgba(124,58,237,0.15);color:var(--purple-light);">&#x1F916;</div>
+          <h3>了解 Claude Code</h3>
+        </div>
+        <p>什么是 AI 编程助手？同类工具对比分析</p>
+        <div style="margin-top:0.5rem;display:flex;gap:0.3rem;flex-wrap:wrap;">
+          <span class="feature-tag" style="background:rgba(124,58,237,0.1);color:var(--purple-light);">概念入门</span>
+          <span class="feature-tag" style="background:rgba(124,58,237,0.1);color:var(--purple-light);">工具对比</span>
+        </div>
+      </div>
+      <div class="card reveal-bounce" style="border-top:3px solid var(--gold);">
+        <div style="display:flex;align-items:center;gap:0.8rem;margin-bottom:0.6rem;">
+          <div class="icon-circle" style="background:rgba(245,158,11,0.15);color:var(--gold);">&#x26A1;</div>
+          <h3>核心区别在哪</h3>
+        </div>
+        <p>它和普通 AI 对话有什么本质不同</p>
+        <div style="margin-top:0.5rem;display:flex;gap:0.3rem;flex-wrap:wrap;">
+          <span class="feature-tag" style="background:rgba(245,158,11,0.1);color:var(--gold);">对比分析</span>
+          <span class="feature-tag" style="background:rgba(245,158,11,0.1);color:var(--gold);">核心优势</span>
+        </div>
+      </div>
+      <div class="card reveal-bounce" style="border-top:3px solid var(--cyan);">
+        <div style="display:flex;align-items:center;gap:0.8rem;margin-bottom:0.6rem;">
+          <div class="icon-circle" style="background:rgba(6,182,212,0.15);color:var(--cyan);">&#x1F3AF;</div>
+          <h3>真实案例展示</h3>
+        </div>
+        <p>0 代码基础做出营销文案生成与发布工具</p>
+        <div style="margin-top:0.5rem;display:flex;gap:0.3rem;flex-wrap:wrap;">
+          <span class="feature-tag" style="background:rgba(6,182,212,0.1);color:var(--cyan);">实战项目</span>
+          <span class="feature-tag" style="background:rgba(6,182,212,0.1);color:var(--cyan);">0代码</span>
+        </div>
+      </div>
+      <div class="card reveal-right" style="border-top:3px solid var(--green);">
+        <div style="display:flex;align-items:center;gap:0.8rem;margin-bottom:0.6rem;">
+          <div class="icon-circle" style="background:rgba(16,185,129,0.15);color:var(--green);">&#x1F680;</div>
+          <h3>部署 + 进阶</h3>
+        </div>
+        <p>手把手教你安装配置，解锁更多玩法</p>
+        <div style="margin-top:0.5rem;display:flex;gap:0.3rem;flex-wrap:wrap;">
+          <span class="feature-tag" style="background:rgba(16,185,129,0.1);color:var(--green);">Windows</span>
+          <span class="feature-tag" style="background:rgba(16,185,129,0.1);color:var(--green);">Skills</span>
+          <span class="feature-tag" style="background:rgba(16,185,129,0.1);color:var(--green);">MCP</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-num">03</div>
+</section>
+
+<!-- ==========================================
+         SLIDE 4: WHAT IS CLAUDE CODE (with mock terminal)
+     ========================================== -->
+<section class="slide">
+  <div class="deco-circle deco-circle-purple" style="width:300px;height:300px;top:-80px;right:10%;"></div>
+  <div class="slide-content">
+    <h2 class="reveal-scale" style="margin-bottom:0.3rem;">什么是 Claude Code？</h2>
+    <div class="divider reveal"></div>
+    <div class="two-col" style="margin-top:var(--content-gap);align-items:start;">
+      <!-- Left column: definition + description + quote -->
+      <div class="reveal">
+        <h3 class="typing-cursor" style="font-size:clamp(1.2rem,3vw,1.8rem);color:var(--purple-light);font-weight:800;margin-bottom:var(--content-gap);">
+          用自然语言驱动的 AI 编程助手
+        </h3>
+        <p style="font-size:var(--body-size);line-height:1.8;margin-bottom:var(--content-gap);">
+          <strong style="color:var(--text-primary);">不需要会写代码</strong>，只需要用中文描述需求，它就能帮你<span class="text-gold">写代码</span>、<span class="text-purple">建网站</span>、<span class="text-gold">做工具</span>。
+        </p>
+        <p style="font-size:var(--body-size);line-height:1.8;color:var(--text-secondary);margin-bottom:var(--content-gap);">
+          在终端和 VS Code 中运行，自动读写文件、执行命令、部署应用。内置记忆系统，越用越懂你的偏好和项目上下文。
+        </p>
+        <div class="quote reveal" style="margin-top:var(--content-gap);">
+          "就像一个随身的技术团队，你说需求，它来实现。"
+        </div>
+      </div>
+      <!-- Right column: mock terminal as hero visual -->
+      <div class="reveal-right" style="transition-delay:0.2s;">
+        <div class="mock-terminal pulse-ring">
+          <div class="terminal-bar">
+            <div class="terminal-dot" style="background:#ff5f57;"></div>
+            <div class="terminal-dot" style="background:#febc2e;"></div>
+            <div class="terminal-dot" style="background:#28c840;"></div>
+            <span style="color:var(--text-muted);margin-left:0.5rem;font-size:0.7rem;">Terminal</span>
+          </div>
+          <div class="terminal-body">
+            <div><span class="terminal-user">$</span> <span class="terminal-cmd">帮我做一个小红书文案生成器</span></div>
+            <div style="margin-top:0.5rem;"><span class="terminal-ai">&#x276F;</span> <span class="terminal-muted">好的，我来帮你创建...</span></div>
+            <div style="margin-top:0.3rem;"><span class="terminal-ai">&#x276F;</span> <span style="color:var(--green);">&#x2713; 已创建 app.py</span></div>
+            <div><span class="terminal-ai">&#x276F;</span> <span style="color:var(--green);">&#x2713; 已创建 index.html</span></div>
+            <div><span class="terminal-ai">&#x276F;</span> <span style="color:var(--green);">&#x2713; 已安装依赖并启动服务</span></div>
+            <div style="margin-top:0.5rem;"><span class="terminal-user">$</span> <span class="terminal-cmd">按钮大一点，颜色改成蓝色</span></div>
+            <div><span class="terminal-ai">&#x276F;</span> <span style="color:var(--green);">&#x2713; 已更新，页面已刷新</span></div>
+            <div style="margin-top:0.6rem;text-align:center;font-size:0.7rem;color:var(--gold);">&#x2728; 整个过程不到5分钟</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-num">04</div>
+</section>
+
+<!-- ==========================================
+         SLIDE 5: TOOL COMPARISON (with feature tags)
+     ========================================== -->
+<section class="slide">
+  <div class="slide-label">Comparison</div>
+  <div class="slide-content">
+    <h2 class="reveal-scale" style="margin-bottom:var(--content-gap);">市面上的 AI 编程工具</h2>
+    <div class="divider reveal"></div>
+    <div class="grid-5 grid-stagger" style="margin-top:var(--content-gap);">
+      <div class="card tool-highlight reveal-scale" style="text-align:center;">
+        <img class="tool-logo" src="assets/logo-claude.svg" alt="Claude Code">
+        <div style="font-size:2rem;margin-bottom:0.5rem;">&#x2728;</div>
+        <h3 style="font-size:var(--h3-size);margin-bottom:0.4rem;">Claude Code</h3>
+        <p style="font-size:var(--small-size);margin-bottom:0.5rem;">对话式开发<br>中文好，零基础友好</p>
+        <div style="display:flex;flex-wrap:wrap;gap:0.2rem;justify-content:center;">
+          <span class="feature-tag" style="background:rgba(124,58,237,0.15);color:var(--purple-light);">零基础</span>
+          <span class="feature-tag" style="background:rgba(124,58,237,0.15);color:var(--purple-light);">中文优</span>
+          <span class="feature-tag" style="background:rgba(124,58,237,0.15);color:var(--purple-light);">全栈</span>
+        </div>
+      </div>
+      <div class="card reveal-bounce" style="text-align:center;">
+        <img class="tool-logo" src="assets/logo-cursor.svg" alt="Cursor">
+        <h3 style="font-size:var(--h3-size);margin-bottom:0.4rem;">Cursor</h3>
+        <p style="font-size:var(--small-size);margin-bottom:0.5rem;">编辑器 + AI<br>适合有基础的人</p>
+        <div style="display:flex;flex-wrap:wrap;gap:0.2rem;justify-content:center;">
+          <span class="feature-tag" style="background:rgba(255,255,255,0.05);color:var(--text-muted);">需基础</span>
+          <span class="feature-tag" style="background:rgba(255,255,255,0.05);color:var(--text-muted);">编辑器</span>
+        </div>
+      </div>
+      <div class="card reveal-bounce" style="text-align:center;">
+        <img class="tool-logo" src="assets/logo-copilot.svg" alt="GitHub Copilot">
+        <h3 style="font-size:var(--h3-size);margin-bottom:0.4rem;">GitHub Copilot</h3>
+        <p style="font-size:var(--small-size);margin-bottom:0.5rem;">代码补全为主<br>适合专业程序员</p>
+        <div style="display:flex;flex-wrap:wrap;gap:0.2rem;justify-content:center;">
+          <span class="feature-tag" style="background:rgba(255,255,255,0.05);color:var(--text-muted);">程序员</span>
+          <span class="feature-tag" style="background:rgba(255,255,255,0.05);color:var(--text-muted);">补全</span>
+        </div>
+      </div>
+      <div class="card reveal-bounce" style="text-align:center;">
+        <img class="tool-logo" src="assets/logo-windsurf.svg" alt="Windsurf">
+        <h3 style="font-size:var(--h3-size);margin-bottom:0.4rem;">Windsurf</h3>
+        <p style="font-size:var(--small-size);margin-bottom:0.5rem;">类似 Cursor<br>需要代码基础</p>
+        <div style="display:flex;flex-wrap:wrap;gap:0.2rem;justify-content:center;">
+          <span class="feature-tag" style="background:rgba(255,255,255,0.05);color:var(--text-muted);">需基础</span>
+          <span class="feature-tag" style="background:rgba(255,255,255,0.05);color:var(--text-muted);">编辑器</span>
+        </div>
+      </div>
+      <div class="card reveal-bounce" style="text-align:center;">
+        <div style="display:flex;justify-content:center;gap:0.5rem;margin-bottom:0.3rem;">
+          <img class="tool-logo" src="assets/logo-bolt.svg" alt="Bolt" style="width:clamp(1.8rem,2.5vw,2.2rem);height:clamp(1.8rem,2.5vw,2.2rem);margin-bottom:0;">
+          <img class="tool-logo" src="assets/logo-v0.svg" alt="v0" style="width:clamp(1.8rem,2.5vw,2.2rem);height:clamp(1.8rem,2.5vw,2.2rem);margin-bottom:0;">
+        </div>
+        <h3 style="font-size:var(--h3-size);margin-bottom:0.4rem;">Bolt / v0</h3>
+        <p style="font-size:var(--small-size);margin-bottom:0.5rem;">一句话生成网页<br>前端设计利器</p>
+        <div style="display:flex;flex-wrap:wrap;gap:0.2rem;justify-content:center;">
+          <span class="feature-tag" style="background:rgba(255,255,255,0.05);color:var(--text-muted);">生成式</span>
+          <span class="feature-tag" style="background:rgba(255,255,255,0.05);color:var(--text-muted);">前端</span>
+        </div>
+      </div>
+    </div>
+    <div class="cta-bar reveal" style="margin-top:var(--content-gap);">
+      <span style="color:var(--gold);font-weight:700;">Claude Code = 最适合非技术人员的 AI 工具。</span>
+      <span style="color:var(--text-secondary);">选最省心的，不要在「最难」的工具上浪费时间。</span>
+    </div>
+  </div>
+  <div class="slide-num">05</div>
+</section>
+<!-- ==========================================
+     TRANSITION SLIDE: PART 2 — 价值篇
+     ========================================== -->
+<section class="slide slide-dark" style="overflow:hidden;">
+  <div class="deco-circle deco-circle-purple" style="width:450px;height:450px;top:-120px;right:-100px;"></div>
+  <div class="deco-circle deco-circle-gold" style="width:300px;height:300px;bottom:-80px;left:-60px;"></div>
+  <div class="deco-ring" style="width:200px;height:200px;top:15%;left:10%;border-color:rgba(124,58,237,0.1);animation:spin-slow 25s linear infinite;"></div>
+  <div class="floating-shape" style="top:20%;right:15%;animation-delay:1s;">
+    <svg width="36" height="36" viewBox="0 0 36 36"><circle cx="18" cy="18" r="14" fill="none" stroke="rgba(245,158,11,0.15)" stroke-width="1.5"/></svg>
+  </div>
+  <div class="floating-shape" style="bottom:25%;right:25%;animation-delay:3s;">
+    <svg width="24" height="24" viewBox="0 0 24 24"><polygon points="12,2 22,14 18,26 6,26 2,14" fill="none" stroke="rgba(124,58,237,0.12)" stroke-width="1.5"/></svg>
+  </div>
+  <div class="slide-content" style="justify-content:center;align-items:center;text-align:center;">
+    <div class="reveal-blur" style="font-size:clamp(0.8rem,1.5vw,1rem);color:var(--gold);letter-spacing:0.3em;margin-bottom:clamp(0.8rem,2vw,1.5rem);font-family:var(--font-display);">
+      PART 2
+    </div>
+    <h2 class="reveal-scale" style="font-size:clamp(2.5rem,7vw,5rem);background:linear-gradient(135deg,#fff 0%,var(--purple-light) 40%,var(--gold) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:clamp(0.5rem,1.5vw,1rem);">
+      价值篇
+    </h2>
+    <p class="reveal" style="font-size:clamp(0.9rem,2vw,1.3rem);color:var(--text-secondary);max-width:min(80vw,32rem);margin:0 auto;line-height:1.8;">
+      为什么你需要 Claude Code？<br>它和普通 AI 到底有什么不一样？
+    </p>
+    <div class="divider reveal-blur" style="margin:clamp(1.5rem,3vw,2.5rem) auto;background:var(--gold);"></div>
+  </div>
+  <div class="slide-num">06</div>
+</section>
+
+
+<!-- ==========================================
+         SLIDE 6: VALUE FOR MARKETING (with stats)
+     ========================================== -->
+<section class="slide">
+  <div class="slide-label">Value</div>
+  <div class="slide-content">
+    <h2 class="reveal-scale" style="margin-bottom:var(--content-gap);">对你有什么用？</h2>
+    <div class="divider reveal"></div>
+    <!-- Stats bar -->
+    <div class="reveal" style="display:flex;justify-content:center;gap:clamp(1.5rem,4vw,3rem);margin-bottom:var(--content-gap);">
+      <div style="text-align:center;">
+        <div class="stat-number" style="color:var(--purple-light);">10x</div>
+        <div class="stat-label">效率提升</div>
+      </div>
+      <div style="text-align:center;">
+        <div class="stat-number" style="color:var(--gold);">0</div>
+        <div class="stat-label">代码基础要求</div>
+      </div>
+      <div style="text-align:center;">
+        <div class="stat-number" style="color:var(--green);">5min</div>
+        <div class="stat-label">从想法到成品</div>
+      </div>
+    </div>
+    <div class="grid-2 grid-stagger">
+      <div class="card reveal-left" style="border-left:3px solid var(--purple);">
+        <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.5rem;">
+          <span style="font-size:1.5rem;">&#x1F4DD;</span>
+          <h3>文案自动生成</h3>
+        </div>
+        <p>小红书、公众号、抖音文案<br>一键批量生成，多种风格切换</p>
+      </div>
+      <div class="card reveal-left" style="border-left:3px solid var(--cyan);">
+        <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.5rem;">
+          <span style="font-size:1.5rem;">&#x1F6E0;&#xFE0F;</span>
+          <h3>搭建营销工具</h3>
+        </div>
+        <p>不写代码也能做<br>数据平台、内容管理系统</p>
+      </div>
+      <div class="card reveal-left" style="border-left:3px solid var(--green);">
+        <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.5rem;">
+          <span style="font-size:1.5rem;">&#x1F916;</span>
+          <h3>自动化工作流</h3>
+        </div>
+        <p>定时抓热点、自动生成<br>一键发布多平台</p>
+      </div>
+      <div class="card reveal-left" style="border-left:3px solid var(--gold);">
+        <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.5rem;">
+          <span style="font-size:1.5rem;">&#x1F4BC;</span>
+          <h3>作品集加分</h3>
+        </div>
+        <p>面试展示自己做的工具<br>比简历更有说服力</p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-num">07</div>
+</section>
+<!-- ==========================================
+         SLIDE 7: AI RESHAPING MARKETING (NEW)
+     ========================================== -->
+<section class="slide">
+  <div style="position:absolute;inset:0;z-index:0;opacity:0.06;"><img src="assets/dashboard.jpg" alt="" style="width:100%;height:100%;object-fit:cover;"></div>
+  <div class="deco-circle deco-circle-purple" style="width:280px;height:280px;top:5%;left:-80px;"></div>
+  <div class="deco-circle deco-circle-gold" style="width:200px;height:200px;bottom:8%;right:-50px;"></div>
+  <!-- Mini chart illustrations -->
+  <div class="floating-shape" style="top:12%;right:8%;animation-delay:1s;">
+    <svg width="120" height="80" viewBox="0 0 120 80">
+      <rect x="5" y="30" width="14" height="50" rx="3" fill="rgba(124,58,237,0.3)"/>
+      <rect x="25" y="15" width="14" height="65" rx="3" fill="rgba(168,85,247,0.35)"/>
+      <rect x="45" y="35" width="14" height="45" rx="3" fill="rgba(124,58,237,0.25)"/>
+      <rect x="65" y="5" width="14" height="75" rx="3" fill="rgba(245,158,11,0.4)"/>
+      <rect x="85" y="22" width="14" height="58" rx="3" fill="rgba(124,58,237,0.3)"/>
+      <rect x="105" y="10" width="14" height="70" rx="3" fill="rgba(245,158,11,0.35)"/>
+      <line x1="0" y1="79" x2="120" y2="79" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+    </svg>
+  </div>
+  <div class="slide-label">Industry Data</div>
+  <div class="slide-content">
+    <h2 class="reveal-scale" style="margin-bottom:var(--content-gap);">AI正在重塑营销行业</h2>
+    <div class="divider reveal-scale"></div>
+    <p class="reveal" style="text-align:center;font-size:var(--body-size);color:var(--text-secondary);margin-bottom:var(--content-gap);">
+      这不是未来趋势，这是正在发生的事
+    </p>
+    <div class="grid-2 grid-stagger" style="margin-top:0.5rem;">
+      <div class="card reveal-left" style="text-align:center;border-top:3px solid var(--purple);">
+        <div class="stat-number" style="color:var(--purple-light);">73%</div>
+        <div style="font-size:var(--small-size);color:var(--text-secondary);margin-top:0.2rem;">
+          的营销人员已经在使用 AI 工具辅助工作
+        </div>
+        <div style="font-size:0.6rem;color:var(--text-muted);margin-top:0.4rem;">来源：HubSpot 2025 营销报告</div>
+      </div>
+      <div class="card reveal-right" style="text-align:center;border-top:3px solid var(--gold);">
+        <div class="stat-number" style="color:var(--gold);">3x</div>
+        <div style="font-size:var(--small-size);color:var(--text-secondary);margin-top:0.2rem;">
+          AI 营销相关岗位数量两年内增长了 3 倍
+        </div>
+        <div style="font-size:0.6rem;color:var(--text-muted);margin-top:0.4rem;">来源：LinkedIn 2025 人才报告</div>
+      </div>
+      <div class="card reveal-left" style="text-align:center;border-top:3px solid var(--cyan);">
+        <div class="stat-number" style="color:var(--cyan);">60%</div>
+        <div style="font-size:var(--small-size);color:var(--text-secondary);margin-top:0.2rem;">
+          使用 AI 后内容创作时间平均缩短了 60%
+        </div>
+        <div style="font-size:0.6rem;color:var(--text-muted);margin-top:0.4rem;">来源：McKinsey 2025</div>
+      </div>
+      <div class="card reveal-right" style="text-align:center;border-top:3px solid var(--green);">
+        <div class="stat-number" style="color:var(--green);">35%</div>
+        <div style="font-size:var(--small-size);color:var(--text-secondary);margin-top:0.2rem;">
+          掌握 AI 工具的营销人薪资高出同行 35%
+        </div>
+        <div style="font-size:0.6rem;color:var(--text-muted);margin-top:0.4rem;">来源：Glassdoor 2025</div>
+      </div>
+    </div>
+    <p class="reveal-blur text-gold" style="text-align:center;margin-top:var(--content-gap);font-weight:700;font-size:var(--body-size);">
+      结论：会 AI 的营销人，不是"加分项"，是"必须项" &#x26A1;
+    </p>
+  </div>
+  <div class="slide-num">08</div>
+</section>
+
+
+<!-- ==========================================
+         SLIDE 8: VS CHAT AI (scenario-based)
+     ========================================== -->
+<section class="slide">
+  <div class="slide-label">Difference</div>
+  <div class="slide-content">
+    <h2 class="reveal-scale" style="margin-bottom:clamp(0.8rem,1.5vw,1.2rem);">同一个需求，两种结果</h2>
+    <p class="reveal text-muted" style="text-align:center;font-size:var(--small-size);margin-bottom:clamp(0.6rem,1.2vw,1rem);">你说："帮我把这个营销方案做成网页"</p>
+    <div class="two-col reveal-scale" style="max-width:min(95vw,60rem);margin-left:auto;margin-right:auto;">
+      <div class="card compare-left" style="padding:clamp(0.8rem,1.5vw,1.2rem);">
+        <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:clamp(0.5rem,1vw,0.8rem);">
+          <span style="font-size:clamp(1.2rem,2vw,1.6rem);">&#x1F4AC;</span>
+          <h3 style="color:var(--text-muted);margin:0;">ChatGPT</h3>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:0.4rem;font-size:clamp(0.7rem,1.1vw,0.85rem);">
+          <p style="color:var(--text-secondary);padding:0.4rem 0.6rem;background:rgba(255,255,255,0.03);border-radius:6px;">&#x2715; "好的，以下是 HTML 代码"</p>
+          <p style="color:var(--text-secondary);padding:0.4rem 0.6rem;background:rgba(255,255,255,0.03);border-radius:6px;">&#x2715; 你得自己建文件、粘贴代码</p>
+          <p style="color:var(--text-secondary);padding:0.4rem 0.6rem;background:rgba(255,255,255,0.03);border-radius:6px;">&#x2715; 出错了不知道怎么修</p>
+          <p style="color:var(--text-muted);font-weight:600;text-align:center;padding-top:0.4rem;border-top:1px solid rgba(255,255,255,0.06);">
+            最终：一段你不知道怎么用的代码
+          </p>
+        </div>
+      </div>
+      <div class="card compare-right" style="padding:clamp(0.8rem,1.5vw,1.2rem);">
+        <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:clamp(0.5rem,1vw,0.8rem);">
+          <span style="font-size:clamp(1.2rem,2vw,1.6rem);">&#x26A1;</span>
+          <h3 style="color:var(--purple-light);margin:0;">Claude Code</h3>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:0.4rem;font-size:clamp(0.7rem,1.1vw,0.85rem);">
+          <p style="color:var(--text-primary);padding:0.4rem 0.6rem;background:rgba(124,58,237,0.06);border-radius:6px;">&#x2713; 自动建好文件、写好代码</p>
+          <p style="color:var(--text-primary);padding:0.4rem 0.6rem;background:rgba(124,58,237,0.06);border-radius:6px;">&#x2713; 直接运行，浏览器自动打开</p>
+          <p style="color:var(--text-primary);padding:0.4rem 0.6rem;background:rgba(124,58,237,0.06);border-radius:6px;">&#x2713; 出错了它自己修</p>
+          <p style="color:var(--gold);font-weight:600;text-align:center;padding-top:0.4rem;border-top:1px solid rgba(124,58,237,0.15);">
+            &#x2728; 最终：一个打开就能用的网页
+          </p>
+        </div>
+      </div>
+    </div>
+    <p class="reveal" style="text-align:center;margin-top:clamp(0.5rem,1vw,0.8rem);font-size:clamp(0.65rem,1vw,0.8rem);color:var(--text-muted);">
+      区别不是"谁更聪明"，而是"谁能帮你把事做完"
+    </p>
+  </div>
+  <div class="slide-num">09</div>
+</section>
+
+<!-- ==========================================
+         SLIDE 9: ANALOGY (with visual recipe vs dish)
+     ========================================== -->
+<section class="slide">
+  <div class="deco-circle deco-circle-gold" style="width:250px;height:250px;bottom:10%;left:5%;"></div>
+  <div class="slide-content" style="align-items:center;text-align:center;">
+    <h2 class="reveal-blur" style="margin-bottom:var(--content-gap);">一个类比帮你秒懂</h2>
+    <div class="divider reveal" style="margin:0 auto var(--content-gap);"></div>
+    <div class="two-col reveal-scale" style="max-width:min(95vw,50rem);position:relative;margin:0 auto;">
+      <!-- Recipe card (普通AI) -->
+      <div class="photo-card" style="border:2px dashed rgba(255,255,255,0.2);">
+        <img src="assets/recipe.jpg" alt="菜谱 - 普通AI">
+        <div class="photo-label">&#x1F4CB; 普通 AI — 给你一个菜谱</div>
+      </div>
+      <div class="vs-badge" style="font-size:1.2rem;">&#x2192;</div>
+      <!-- Dish card (Claude Code) -->
+      <div class="photo-card pulse-ring" style="border:2px solid rgba(124,58,237,0.4);">
+        <img src="assets/chef.jpg" alt="成品菜 - Claude Code">
+        <div class="photo-label" style="background:linear-gradient(transparent, rgba(124,58,237,0.85));">&#x1F37D;&#xFE0F; Claude Code — 帮你把菜做好端上桌</div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-num">10</div>
+</section>
+
+<!-- ==========================================
+         SLIDE 11: BEFORE VS AFTER (NEW)
+     ========================================== -->
+<section class="slide">
+  <div class="deco-circle deco-circle-purple" style="width:300px;height:300px;top:-50px;left:-60px;"></div>
+  <div class="deco-circle deco-circle-gold" style="width:200px;height:200px;bottom:5%;right:-40px;"></div>
+  <!-- Clock illustration -->
+  <div class="floating-shape" style="top:10%;right:8%;animation-delay:0.8s;">
+    <svg width="70" height="70" viewBox="0 0 70 70">
+      <circle cx="35" cy="35" r="32" fill="none" stroke="rgba(245,158,11,0.15)" stroke-width="1.5"/>
+      <circle cx="35" cy="35" r="28" fill="none" stroke="rgba(245,158,11,0.08)" stroke-width="1"/>
+      <line x1="35" y1="35" x2="35" y2="18" stroke="rgba(245,158,11,0.3)" stroke-width="2" stroke-linecap="round"/>
+      <line x1="35" y1="35" x2="48" y2="40" stroke="rgba(245,158,11,0.2)" stroke-width="1.5" stroke-linecap="round"/>
+      <circle cx="35" cy="35" r="2" fill="rgba(245,158,11,0.5)"/>
+    </svg>
+  </div>
+  <div class="slide-label">Day in the Life</div>
+  <div class="slide-content">
+    <h2 class="reveal-scale" style="margin-bottom:0.5rem;">一个营销学生的 Before vs After</h2>
+    <div class="divider reveal-scale"></div>
+    <div class="two-col reveal-scale" style="margin-top:var(--content-gap);max-width:min(95vw,58rem);margin-left:auto;margin-right:auto;">
+        <!-- Clock photo -->
+        <div class="photo-card reveal-blur" style="position:absolute;top:-20px;right:-20px;width:clamp(80px,12vw,140px);height:clamp(80px,12vw,140px);border-radius:50%;overflow:hidden;border:2px solid rgba(245,158,11,0.2);z-index:2;">
+          <img src="assets/clock.jpg" alt="时间" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+      <!-- Before column -->
+      <div class="card" style="border:2px dashed rgba(255,255,255,0.15);padding:clamp(1rem,2vw,1.5rem);">
+        <h3 style="color:var(--text-muted);text-align:center;margin-bottom:0.8rem;">&#x1F552; Before — 没有 Claude Code</h3>
+        <div style="display:flex;flex-direction:column;gap:0.5rem;">
+          <div style="display:flex;align-items:center;gap:0.5rem;font-size:var(--small-size);">
+            <span style="color:#ef4444;">&#x2715;</span>
+            <span style="color:var(--text-secondary);">打开 ChatGPT — 生成一段小红书文案</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.5rem;font-size:var(--small-size);">
+            <span style="color:#ef4444;">&#x2715;</span>
+            <span style="color:var(--text-secondary);">复制文案，手动改格式排版</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.5rem;font-size:var(--small-size);">
+            <span style="color:#ef4444;">&#x2715;</span>
+            <span style="color:var(--text-secondary);">想生成公众号版本——再问一次，再复制</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.5rem;font-size:var(--small-size);">
+            <span style="color:#ef4444;">&#x2715;</span>
+            <span style="color:var(--text-secondary);">想做数据面板——只能求计算机系的同学帮忙</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.5rem;font-size:var(--small-size);">
+            <span style="color:#ef4444;">&#x2715;</span>
+            <span style="color:var(--text-secondary);">每次改需求都要重新来一遍</span>
+          </div>
+        </div>
+        <div style="text-align:center;margin-top:0.8rem;padding-top:0.6rem;border-top:1px solid rgba(255,255,255,0.08);">
+          <span style="color:#ef4444;font-weight:700;">&#x23F1; 耗时：6小时+</span>
+        </div>
+      </div>
+      <!-- VS badge -->
+      <div class="vs-badge" style="width:clamp(2rem,3vw,2.8rem);height:clamp(2rem,3vw,2.8rem);font-size:clamp(0.55rem,0.8vw,0.7rem);">VS</div>
+      <!-- After column -->
+      <div class="card" style="border:2px solid rgba(124,58,237,0.4);padding:clamp(1rem,2vw,1.5rem);">
+        <h3 style="color:var(--purple-light);text-align:center;margin-bottom:0.8rem;">&#x2728; After — 有了 Claude Code</h3>
+        <div style="display:flex;flex-direction:column;gap:0.5rem;">
+          <div style="display:flex;align-items:center;gap:0.5rem;font-size:var(--small-size);">
+            <span style="color:var(--green);">&#x2713;</span>
+            <span style="color:var(--text-primary);">一句话生成小红书+公众号+抖音三版文案</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.5rem;font-size:var(--small-size);">
+            <span style="color:var(--green);">&#x2713;</span>
+            <span style="color:var(--text-primary);">自动排版，一键切换风格</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.5rem;font-size:var(--small-size);">
+            <span style="color:var(--green);">&#x2713;</span>
+            <span style="color:var(--text-primary);">一个工具管所有平台，不用来回切换</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.5rem;font-size:var(--small-size);">
+            <span style="color:var(--green);">&#x2713;</span>
+            <span style="color:var(--text-primary);">自己做数据面板，不求人</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.5rem;font-size:var(--small-size);">
+            <span style="color:var(--green);">&#x2713;</span>
+            <span style="color:var(--text-primary);">改需求就是一句话的事</span>
+          </div>
+        </div>
+        <div style="text-align:center;margin-top:0.8rem;padding-top:0.6rem;border-top:1px solid rgba(124,58,237,0.25);">
+          <span style="color:var(--green);font-weight:700;">&#x23F1; 耗时：45分钟</span>
+        </div>
+      </div>
+    </div>
+    <div class="cta-bar reveal-blur" style="margin-top:var(--content-gap);">
+      <span style="color:var(--gold);font-weight:700;">&#x26A1; 效率提升 8 倍。</span>
+      <span style="color:var(--text-secondary);">省下的时间，拿去刷剧、实习、谈恋爱——不香吗？</span>
+    </div>
+  </div>
+  <div class="slide-num">11</div>
+</section>
+<!-- ==========================================
+         SLIDE 10: WHY WORTH IT (with visual emphasis)
+     ========================================== -->
+<section class="slide">
+  <div class="slide-label">Motivation</div>
+  <div class="deco-circle deco-circle-purple" style="width:220px;height:220px;top:10%;right:-50px;"></div>
+  <div class="slide-content">
+    <h2 class="reveal-scale" style="margin-bottom:var(--content-gap);">装一次，到处用</h2>
+    <div class="divider reveal"></div>
+    <div style="display:flex;flex-direction:column;gap:var(--content-gap);margin-top:var(--content-gap);">
+      <div class="card reveal-left shimmer" style="display:flex;align-items:center;gap:clamp(0.8rem,1.5vw,1.2rem);border-left:3px solid var(--purple);">
+        <div class="icon-circle" style="background:rgba(124,58,237,0.15);color:var(--purple-light);font-size:1.5rem;">&#x1F393;</div>
+        <div>
+          <h3 style="margin-bottom:0.2rem;">课程项目</h3>
+          <p>营销策划案、数据分析报告、消费者调研——做出来的东西比纯文字报告有说服力一百倍。</p>
+        </div>
+      </div>
+      <div class="card reveal-left shimmer" style="display:flex;align-items:center;gap:clamp(0.8rem,1.5vw,1.2rem);border-left:3px solid var(--gold);">
+        <div class="icon-circle" style="background:rgba(245,158,11,0.15);color:var(--gold);font-size:1.5rem;">&#x1F4BC;</div>
+        <div>
+          <h3 style="margin-bottom:0.2rem;">实习工作</h3>
+          <p>领导让你做个数据面板，别人还在 Excel 里拉公式，你直接交一个可视化网页。</p>
+        </div>
+      </div>
+      <div class="card reveal-left shimmer" style="display:flex;align-items:center;gap:clamp(0.8rem,1.5vw,1.2rem);border-left:3px solid var(--cyan);">
+        <div class="icon-circle" style="background:rgba(6,182,212,0.15);color:var(--cyan);font-size:1.5rem;">&#x1F4BC;</div>
+        <div>
+          <h3 style="margin-bottom:0.2rem;">面试加分</h3>
+          <p>别人交简历，你交一个自己做的工具链接。面试官问起来，你说"我自己做的"。</p>
+        </div>
+      </div>
+    </div>
+    <div class="cta-bar reveal" style="margin-top:var(--content-gap);">
+      <span style="display:inline-flex;align-items:center;gap:0.5rem;">&#x1F447; 现在，我给大家展示两个我用它做的真实项目</span>
+    </div>
+  </div>
+  <div class="slide-num">12</div>
+</section>
+<!-- ==========================================
+     TRANSITION SLIDE: PART 3 — 实战篇
+     ========================================== -->
+<section class="slide slide-dark" style="overflow:hidden;">
+  <div class="deco-circle deco-circle-gold" style="width:400px;height:400px;top:-80px;left:-80px;"></div>
+  <div class="deco-circle deco-circle-purple" style="width:320px;height:320px;bottom:-100px;right:-60px;"></div>
+  <div class="deco-ring" style="width:180px;height:180px;bottom:15%;left:15%;border-color:rgba(245,158,11,0.08);animation:spin-slow 20s linear infinite reverse;"></div>
+  <div class="floating-shape" style="top:15%;right:20%;animation-delay:0.5s;">
+    <svg width="30" height="30" viewBox="0 0 30 30"><rect x="4" y="4" width="22" height="22" rx="3" fill="none" stroke="rgba(124,58,237,0.15)" stroke-width="1.5" transform="rotate(30 15 15)"/></svg>
+  </div>
+  <div class="floating-shape" style="bottom:20%;left:25%;animation-delay:2.5s;">
+    <svg width="20" height="20" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8" fill="none" stroke="rgba(245,158,11,0.12)" stroke-width="1.5"/></svg>
+  </div>
+  <div class="slide-content" style="justify-content:center;align-items:center;text-align:center;">
+    <div class="reveal-blur" style="font-size:clamp(0.8rem,1.5vw,1rem);color:var(--gold);letter-spacing:0.3em;margin-bottom:clamp(0.8rem,2vw,1.5rem);font-family:var(--font-display);">
+      PART 3
+    </div>
+    <h2 class="reveal-scale" style="font-size:clamp(2.5rem,7vw,5rem);background:linear-gradient(135deg,#fff 0%,var(--gold) 40%,var(--purple-light) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:clamp(0.5rem,1.5vw,1rem);">
+      实战篇
+    </h2>
+    <p class="reveal" style="font-size:clamp(0.9rem,2vw,1.3rem);color:var(--text-secondary);max-width:min(80vw,32rem);margin:0 auto;line-height:1.8;">
+      看看真实项目长什么样<br>0 代码基础也能做到的事
+    </p>
+    <div class="divider reveal-blur" style="margin:clamp(1.5rem,3vw,2.5rem) auto;background:var(--purple-light);"></div>
+  </div>
+  <div class="slide-num">13</div>
+</section>
+
+
+
+<!-- ==========================================
+         SLIDE 12: PROJECT SHOWCASE (with mock UI)
+     ========================================== -->
+<section class="slide">
+  <div class="slide-label">Projects</div>
+  <div class="slide-content">
+    <h2 class="reveal-scale" style="margin-bottom:var(--content-gap);">项目展示：文案生成与发布中心</h2>
+    <div class="divider reveal"></div>
+    <div class="two-col reveal" style="margin-top:var(--content-gap);">
+      <!-- Project 1: Copy Generator -->
+      <div style="display:flex;flex-direction:column;gap:0.6rem;">
+        <a href="http://localhost:8501/" target="_blank" style="display:inline-flex;align-items:center;gap:0.5rem;padding:clamp(0.4rem,0.8vw,0.6rem) clamp(0.8rem,1.2vw,1rem);background:rgba(124,58,237,0.18);border:1.5px solid rgba(124,58,237,0.4);border-radius:10px;color:var(--purple-light);font-size:clamp(0.75rem,1vw,0.9rem);font-weight:600;text-decoration:none;align-self:flex-start;cursor:pointer;">
+          &#x1F517; 点击打开文案生成器 &#x2192;
+        </a>
+        <div class="card" style="border-top:3px solid var(--purple);padding:0;overflow:hidden;">
+          <div style="background:var(--purple);padding:clamp(0.6rem,1.2vw,1rem) clamp(1rem,2vw,1.5rem);">
+            <h3 style="color:#fff;font-size:var(--h3-size);">&#x1F4E2; 营销文案生成器</h3>
+          </div>
+          <div style="padding:clamp(0.8rem,1.5vw,1.2rem);">
+            <ul style="list-style:none;display:flex;flex-direction:column;gap:0.5rem;">
+              <li style="color:var(--text-secondary);">&#x2726; 输入产品/主题，选择目标平台</li>
+              <li style="color:var(--text-secondary);">&#x2726; 一键批量生成多平台适配文案</li>
+              <li style="color:var(--text-secondary);">&#x2726; 多 AI 角色协作，模拟头脑风暴</li>
+              <li style="color:var(--text-secondary);">&#x2726; 多种文案风格随时切换</li>
+              <li style="color:var(--text-secondary);">&#x2726; 历史记录自动保存</li>
+            </ul>
+          </div>
+        </div>
+        <!-- Mock UI for copy generator -->
+        <div class="mock-app">
+          <div class="mock-app-bar">
+            <span style="color:var(--purple-light);">&#x1F4E2;</span>
+            <span>营销文案生成器</span>
+          </div>
+          <div class="mock-app-body">
+            <div class="mock-input">&#x1F4CC; 输入：新品上市 — 夏季防晒霜</div>
+            <div style="display:flex;gap:0.3rem;">
+              <span class="feature-tag" style="background:rgba(124,58,237,0.15);color:var(--purple-light);">小红书</span>
+              <span class="feature-tag" style="background:rgba(6,182,212,0.15);color:var(--cyan);">公众号</span>
+              <span class="feature-tag" style="background:rgba(245,158,11,0.15);color:var(--gold);">抖音</span>
+            </div>
+            <div class="mock-btn">&#x2728; 一键生成</div>
+            <div class="mock-output">
+              &#x1F4DD; 小红书：姐妹们！这个夏天终于找到不假白的防晒了...<br>
+              &#x1F4DD; 公众号：《夏日防晒新选择，轻薄不黏腻》...<br>
+              &#x1F4DD; 抖音：防晒霜测评！这款真的绝了...
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Project 2: Publishing Hub -->
+      <div style="display:flex;flex-direction:column;gap:0.6rem;">
+        <a href="http://localhost:5173/#/" target="_blank" style="display:inline-flex;align-items:center;gap:0.5rem;padding:clamp(0.4rem,0.8vw,0.6rem) clamp(0.8rem,1.2vw,1rem);background:rgba(6,182,212,0.18);border:1.5px solid rgba(6,182,212,0.4);border-radius:10px;color:var(--cyan);font-size:clamp(0.75rem,1vw,0.9rem);font-weight:600;text-decoration:none;align-self:flex-start;cursor:pointer;">
+          &#x1F517; 点击打开发布中心 &#x2192;
+        </a>
+        <div class="card" style="border-top:3px solid var(--cyan);padding:0;overflow:hidden;">
+          <div style="background:var(--cyan);padding:clamp(0.6rem,1.2vw,1rem) clamp(1rem,2vw,1.5rem);">
+            <h3 style="color:#fff;font-size:var(--h3-size);">&#x1F680; 社交发布中心</h3>
+          </div>
+          <div style="padding:clamp(0.8rem,1.5vw,1.2rem);">
+            <ul style="list-style:none;display:flex;flex-direction:column;gap:0.5rem;">
+              <li style="color:var(--text-secondary);">&#x2726; 可视化内容管理面板</li>
+              <li style="color:var(--text-secondary);">&#x2726; 一键发布到多个社交平台</li>
+              <li style="color:var(--text-secondary);">&#x2726; 支持定时发布，提前排期</li>
+              <li style="color:var(--text-secondary);">&#x2726; 发布效果追踪与数据分析</li>
+              <li style="color:var(--text-secondary);">&#x2726; 统一管理所有内容资产</li>
+            </ul>
+          </div>
+        </div>
+        <!-- Mock UI for publishing hub -->
+        <div class="mock-app">
+          <div class="mock-app-bar">
+            <span style="color:var(--cyan);">&#x1F680;</span>
+            <span>社交发布中心</span>
+          </div>
+          <div class="mock-app-body">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.3rem;">
+              <div style="background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);border-radius:8px;padding:0.4rem;text-align:center;">
+                <div style="font-size:clamp(0.8rem,1.5vw,1.2rem);font-weight:700;color:var(--green);">12</div>
+                <div style="font-size:0.6rem;color:var(--text-muted);">已发布</div>
+              </div>
+              <div style="background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.2);border-radius:8px;padding:0.4rem;text-align:center;">
+                <div style="font-size:clamp(0.8rem,1.5vw,1.2rem);font-weight:700;color:var(--gold);">5</div>
+                <div style="font-size:0.6rem;color:var(--text-muted);">待发布</div>
+              </div>
+            </div>
+            <div class="mock-btn">&#x1F4E4; 一键发布全部</div>
+            <div style="font-size:0.6rem;color:var(--text-muted);text-align:center;">定时：明天 10:00 自动发布</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-num">14</div>
+</section>
+<!-- ==========================================
+         SLIDE 13: MORE YOU CAN BUILD (NEW)
+     ========================================== -->
+<section class="slide">
+  <div style="position:absolute;inset:0;z-index:0;opacity:0.05;"><img src="assets/ideas.jpg" alt="" style="width:100%;height:100%;object-fit:cover;"></div>
+  <div class="deco-circle deco-circle-purple" style="width:250px;height:250px;top:8%;right:-60px;"></div>
+  <div class="deco-ring" style="width:100px;height:100px;bottom:10%;left:6%;border-color:rgba(245,158,11,0.08);animation:spin-slow 15s linear infinite;"></div>
+  <div class="slide-label">Inspiration</div>
+  <div class="slide-content">
+    <h2 class="reveal-scale" style="margin-bottom:var(--content-gap);">你还能做出什么？</h2>
+    <div class="divider reveal-scale"></div>
+    <p class="reveal" style="text-align:center;font-size:var(--body-size);color:var(--text-secondary);margin-bottom:var(--content-gap);">
+      刚才展示的只是冰山一角，下面这些你都能做
+    </p>
+    <div class="grid-3 grid-stagger">
+      <div class="card reveal-bounce" style="text-align:center;border-top:3px solid var(--purple);">
+        <div style="font-size:2rem;margin-bottom:0.5rem;">&#x1F4CA;</div>
+        <h3 style="margin-bottom:0.3rem;">竞品价格监控面板</h3>
+        <p style="font-size:var(--small-size);color:var(--text-muted);">自动抓取竞品价格变化，可视化图表一目了然</p>
+      </div>
+      <div class="card reveal-bounce" style="text-align:center;border-top:3px solid var(--cyan);">
+        <div style="font-size:2rem;margin-bottom:0.5rem;">&#x1F4E7;</div>
+        <h3 style="margin-bottom:0.3rem;">邮件营销自动生成器</h3>
+        <p style="font-size:var(--small-size);color:var(--text-muted);">输入产品信息，批量生成个性化营销邮件</p>
+      </div>
+      <div class="card reveal-bounce" style="text-align:center;border-top:3px solid var(--gold);">
+        <div style="font-size:2rem;margin-bottom:0.5rem;">&#x1F4CA;</div>
+        <h3 style="margin-bottom:0.3rem;">用户调研数据分析</h3>
+        <p style="font-size:var(--small-size);color:var(--text-muted);">问卷数据一键导入，自动生成洞察报告</p>
+      </div>
+      <div class="card reveal-bounce" style="text-align:center;border-top:3px solid var(--green);">
+        <div style="font-size:2rem;margin-bottom:0.5rem;">&#x1F4F1;</div>
+        <h3 style="margin-bottom:0.3rem;">社交媒体定时发布</h3>
+        <p style="font-size:var(--small-size);color:var(--text-muted);">提前排期，多平台定时自动发布</p>
+      </div>
+      <div class="card reveal-bounce" style="text-align:center;border-top:3px solid var(--pink);">
+        <div style="font-size:2rem;margin-bottom:0.5rem;">&#x1F50D;</div>
+        <h3 style="margin-bottom:0.3rem;">SEO关键词优化工具</h3>
+        <p style="font-size:var(--small-size);color:var(--text-muted);">批量分析关键词热度，自动优化内容标题</p>
+      </div>
+      <div class="card reveal-bounce" style="text-align:center;border-top:3px solid var(--purple-light);">
+        <div style="font-size:2rem;margin-bottom:0.5rem;">&#x1F3B2;</div>
+        <h3 style="margin-bottom:0.3rem;">A/B测试计算器</h3>
+        <p style="font-size:var(--small-size);color:var(--text-muted);">自动计算样本量和显著性，傻瓜式操作</p>
+      </div>
+    </div>
+    <p class="reveal text-gold" style="text-align:center;margin-top:var(--content-gap);font-weight:700;">
+      你想到的，它都能做。你没想到的，也可以问问它 &#x1F92F;
+    </p>
+  </div>
+  <div class="slide-num">15</div>
+</section>
+
+
+<!-- ==========================================
+         SLIDE 14: HOW I BUILT IT (enhanced timeline)
+     ========================================== -->
+<section class="slide">
+  <div class="slide-label">Process</div>
+  <div class="slide-content">
+    <h2 class="reveal-scale" style="margin-bottom:var(--content-gap);">0 代码基础，我是怎么做到的？</h2>
+    <div class="divider reveal"></div>
+    <div class="step-flow reveal" style="margin-top:var(--content-gap);">
+      <div class="step-item">
+        <div class="step-num" style="background:var(--gold);color:#000;">1</div>
+        <div style="flex:1;">
+          <strong style="color:var(--text-primary);">有了想法</strong>
+          <span class="step-arrow">&#x2192;</span>
+          <span class="text-muted" style="font-style:italic;">"我想要一个文案生成工具"</span>
+        </div>
+        <span class="badge badge-gold" style="font-size:0.6rem;">灵感</span>
+      </div>
+      <div class="step-item">
+        <div class="step-num" style="background:var(--purple);color:#fff;">2</div>
+        <div style="flex:1;">
+          <strong style="color:var(--text-primary);">告诉 Claude Code</strong>
+          <span class="step-arrow">&#x2192;</span>
+          <span class="text-muted" style="font-style:italic;">用中文描述我的需求</span>
+        </div>
+        <span class="badge badge-purple" style="font-size:0.6rem;">沟通</span>
+      </div>
+      <div class="step-item">
+        <div class="step-num" style="background:var(--cyan);color:#000;">3</div>
+        <div style="flex:1;">
+          <strong style="color:var(--text-primary);">它来写代码</strong>
+          <span class="step-arrow">&#x2192;</span>
+          <span class="text-muted" style="font-style:italic;">自动生成全部代码，我看不懂但能用</span>
+        </div>
+        <span class="badge" style="font-size:0.6rem;background:rgba(6,182,212,0.15);color:var(--cyan);">生成</span>
+      </div>
+      <div class="step-item">
+        <div class="step-num" style="background:var(--pink);color:#fff;">4</div>
+        <div style="flex:1;">
+          <strong style="color:var(--text-primary);">边看边改</strong>
+          <span class="step-arrow">&#x2192;</span>
+          <span class="text-muted" style="font-style:italic;">"按钮调大一点" "改成蓝色"</span>
+        </div>
+        <span class="badge" style="font-size:0.6rem;background:rgba(236,72,153,0.15);color:var(--pink);">迭代</span>
+      </div>
+      <div class="step-item">
+        <div class="step-num" style="background:var(--green);color:#000;">5</div>
+        <div style="flex:1;">
+          <strong style="color:var(--text-primary);">不断迭代</strong>
+          <span class="step-arrow">&#x2192;</span>
+          <span class="text-muted" style="font-style:italic;">像搭积木一样，一个个功能往上加</span>
+        </div>
+        <span class="badge badge-green" style="font-size:0.6rem;">扩展</span>
+      </div>
+      <div class="step-item">
+        <div class="step-num pulse-ring" style="background:var(--purple-light);color:#fff;">6</div>
+        <div style="flex:1;">
+          <strong style="color:var(--text-primary);">上线使用</strong>
+          <span class="step-arrow">&#x2192;</span>
+          <span class="text-muted" style="font-style:italic;">一个能跑的应用就这样诞生了</span>
+        </div>
+        <span class="badge" style="font-size:0.6rem;background:rgba(16,185,129,0.15);color:var(--green);">&#x2728; 完成</span>
+      </div>
+    </div>
+    <div class="quote reveal" style="margin-top:var(--content-gap);">
+      "整个过程我没有写过一行代码，只是不断地说'我想要这样'。"
+    </div>
+  </div>
+  <div class="slide-num">16</div>
+</section>
+
+<!-- ==========================================
+         SLIDE 15: INSTALLATION (with connecting arrows)
+     ========================================== -->
+<section class="slide">
+  <div class="slide-label">Setup</div>
+  <div class="slide-content">
+    <h2 class="reveal-scale" style="margin-bottom:var(--content-gap);">如何部署 Claude Code？（Windows）</h2>
+    <div class="divider reveal"></div>
+    <div class="grid-5 grid-stagger" style="margin-top:var(--content-gap);">
+      <div class="card reveal-bounce" style="text-align:center;border-top:3px solid var(--green);">
+        <img class="tool-logo" src="assets/logo-nodejs.svg" alt="Node.js" style="margin-bottom:0.3rem;width:clamp(2rem,2.5vw,2.4rem);height:clamp(2rem,2.5vw,2.4rem);">
+        <div style="font-size:1.5rem;margin-bottom:0.3rem;color:var(--green);font-weight:800;">01</div>
+        <h3 style="font-size:var(--body-size);margin-bottom:0.3rem;">安装 Node.js</h3>
+        <p style="font-size:var(--small-size);color:var(--text-muted);">nodejs.org<br>下载 LTS 版本</p>
+        <div style="margin-top:0.4rem;">
+          <span class="feature-tag" style="background:rgba(16,185,129,0.1);color:var(--green);">运行环境</span>
+        </div>
+      </div>
+      <div class="card reveal-bounce" style="text-align:center;border-top:3px solid var(--gold);">
+        <img class="tool-logo" src="assets/logo-git.svg" alt="Git" style="margin-bottom:0.3rem;width:clamp(2rem,2.5vw,2.4rem);height:clamp(2rem,2.5vw,2.4rem);">
+        <div style="font-size:1.5rem;margin-bottom:0.3rem;color:var(--gold);font-weight:800;">02</div>
+        <h3 style="font-size:var(--body-size);margin-bottom:0.3rem;">安装 Git</h3>
+        <p style="font-size:var(--small-size);color:var(--text-muted);">git-scm.com<br>默认安装即可</p>
+        <div style="margin-top:0.4rem;">
+          <span class="feature-tag" style="background:rgba(245,158,11,0.1);color:var(--gold);">版本管理</span>
+        </div>
+      </div>
+      <div class="card reveal-bounce" style="text-align:center;border-top:3px solid var(--purple);">
+        <img class="tool-logo" src="assets/logo-claude.svg" alt="Claude Code" style="margin-bottom:0.3rem;width:clamp(2rem,2.5vw,2.4rem);height:clamp(2rem,2.5vw,2.4rem);">
+        <div style="font-size:1.5rem;margin-bottom:0.3rem;color:var(--purple-light);font-weight:800;">03</div>
+        <h3 style="font-size:var(--body-size);margin-bottom:0.3rem;">安装 Claude Code</h3>
+        <p style="font-size:var(--small-size);color:var(--text-muted);">npm install -g<br>@anthropic-ai/claude-code</p>
+        <div style="margin-top:0.4rem;">
+          <span class="feature-tag" style="background:rgba(124,58,237,0.1);color:var(--purple-light);">核心安装</span>
+        </div>
+      </div>
+      <div class="card reveal-bounce" style="text-align:center;border-top:3px solid var(--cyan);">
+        <img class="tool-logo" src="assets/logo-vscode.svg" alt="VS Code" style="margin-bottom:0.3rem;width:clamp(2rem,2.5vw,2.4rem);height:clamp(2rem,2.5vw,2.4rem);">
+        <div style="font-size:1.5rem;margin-bottom:0.3rem;color:var(--cyan);font-weight:800;">04</div>
+        <h3 style="font-size:var(--body-size);margin-bottom:0.3rem;">安装 VS Code</h3>
+        <p style="font-size:var(--small-size);color:var(--text-muted);">安装 Claude Code<br>与中文语言包插件</p>
+        <div style="margin-top:0.4rem;">
+          <span class="feature-tag" style="background:rgba(6,182,212,0.1);color:var(--cyan);">编辑器</span>
+        </div>
+      </div>
+      <div class="card reveal-bounce" style="text-align:center;border-top:3px solid var(--pink);">
+        <img class="tool-logo" src="assets/logo-deepseek.svg" alt="DeepSeek" style="margin-bottom:0.3rem;width:clamp(2rem,2.5vw,2.4rem);height:clamp(2rem,2.5vw,2.4rem);">
+        <div style="font-size:1.5rem;margin-bottom:0.3rem;color:var(--pink);font-weight:800;">05</div>
+        <h3 style="font-size:var(--body-size);margin-bottom:0.3rem;">配置 API</h3>
+        <p style="font-size:var(--small-size);color:var(--text-muted);">CC Switch<br>+ DeepSeek API Key</p>
+        <div style="margin-top:0.4rem;">
+          <span class="feature-tag" style="background:rgba(236,72,153,0.1);color:var(--pink);">激活</span>
+        </div>
+      </div>
+    </div>
+    <div class="reveal" style="margin-top:var(--content-gap);">
+      <p style="font-size:var(--small-size);color:var(--text-muted);margin-bottom:0.5rem;">安装命令（以管理员身份打开 PowerShell）：</p>
+      <div class="code-block" style="font-size:var(--small-size);">
+        <div>PS C:\Users\you&gt; npm install -g @anthropic-ai/claude-code</div>
+        <div style="color:var(--text-muted);margin-top:0.3rem;">PS C:\Users\you&gt; claude --version</div>
+        <div style="color:var(--text-muted);">2.1.x &#x2713;</div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-num">17</div>
+</section>
+<!-- ==========================================
+         SLIDE 16: ADDRESSING FEARS (NEW)
+     ========================================== -->
+<section class="slide">
+  <div class="photo-card reveal-right" style="position:absolute;right:clamp(1rem,3vw,3rem);top:50%;transform:translateY(-50%);width:clamp(140px,18vw,240px);border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.1);z-index:1;opacity:0.7;"><img src="assets/student-writing.jpg" alt="" style="width:100%;height:auto;display:block;"><div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(15,15,35,0.6),transparent);"></div></div>
+  <div class="deco-circle deco-circle-purple" style="width:280px;height:280px;top:5%;right:-60px;"></div>
+  <!-- Thought bubble illustration -->
+  <div class="floating-shape" style="bottom:15%;right:10%;animation-delay:1.5s;">
+    <svg width="50" height="50" viewBox="0 0 50 50">
+      <ellipse cx="25" cy="22" rx="18" ry="14" fill="none" stroke="rgba(124,58,237,0.12)" stroke-width="1.5"/>
+      <circle cx="18" cy="38" r="3" fill="none" stroke="rgba(124,58,237,0.1)" stroke-width="1"/>
+      <circle cx="14" cy="44" r="1.5" fill="none" stroke="rgba(124,58,237,0.08)" stroke-width="1"/>
+      <text x="25" y="24" text-anchor="middle" font-size="10" fill="rgba(124,58,237,0.2)">?</text>
+    </svg>
+  </div>
+  <div class="slide-label">Reality Check</div>
+  <div class="slide-content">
+    <h2 class="reveal-scale" style="margin-bottom:var(--content-gap);">你心里可能在想的...</h2>
+    <div class="divider reveal-scale"></div>
+    <div class="grid-2 grid-stagger" style="margin-top:var(--content-gap);">
+      <div class="card reveal-left" style="border-left:3px solid #ef4444;padding:clamp(1rem,2vw,1.5rem);">
+        <div style="font-size:1.5rem;margin-bottom:0.3rem;">&#x1F914;</div>
+        <h3 style="color:#f87171;margin-bottom:0.4rem;">"我怕搞坏电脑"</h3>
+        <p style="font-size:var(--small-size);color:var(--text-muted);margin-bottom:0.5rem;">
+          万一把系统搞崩了怎么办？我又不会修...
+        </p>
+        <div style="border-top:1px solid rgba(255,255,255,0.08);padding-top:0.5rem;">
+          <span style="color:var(--green);font-weight:700;">&#x2705; 真相：</span>
+          <span style="color:var(--text-secondary);font-size:var(--small-size);">Git 自动记录每次改动，出问题一键回退。就像打游戏有存档，怕什么？</span>
+        </div>
+      </div>
+      <div class="card reveal-right" style="border-left:3px solid #f59e0b;padding:clamp(1rem,2vw,1.5rem);">
+        <div style="font-size:1.5rem;margin-bottom:0.3rem;">&#x1F30D;</div>
+        <h3 style="color:var(--gold);margin-bottom:0.4rem;">"我英语不好怎么办"</h3>
+        <p style="font-size:var(--small-size);color:var(--text-muted);margin-bottom:0.5rem;">
+          看那些代码全是英文，我怕看不懂...
+        </p>
+        <div style="border-top:1px solid rgba(255,255,255,0.08);padding-top:0.5rem;">
+          <span style="color:var(--green);font-weight:700;">&#x2705; 真相：</span>
+          <span style="color:var(--text-secondary);font-size:var(--small-size);">你全程用中文交流，它用中文回复。代码是它写的，你不需要看，更不需要懂。</span>
+        </div>
+      </div>
+      <div class="card reveal-left" style="border-left:3px solid #7c3aed;padding:clamp(1rem,2vw,1.5rem);">
+        <div style="font-size:1.5rem;margin-bottom:0.3rem;">&#x1F527;</div>
+        <h3 style="color:var(--purple-light);margin-bottom:0.4rem;">"我怕装不上，太复杂"</h3>
+        <p style="font-size:var(--small-size);color:var(--text-muted);margin-bottom:0.5rem;">
+          5个步骤看起来好多，万一哪步出错...
+        </p>
+        <div style="border-top:1px solid rgba(255,255,255,0.08);padding-top:0.5rem;">
+          <span style="color:var(--green);font-weight:700;">&#x2705; 真相：</span>
+          <span style="color:var(--text-secondary);font-size:var(--small-size);">每一步都有截图教程。装过 Steam 游戏吧？比那个简单。10 分钟，比你们双十一凑满减快。</span>
+        </div>
+      </div>
+      <div class="card reveal-right" style="border-left:3px solid var(--cyan);padding:clamp(1rem,2vw,1.5rem);">
+        <div style="font-size:1.5rem;margin-bottom:0.3rem;">&#x1F4B0;</div>
+        <h3 style="color:var(--cyan);margin-bottom:0.4rem;">"我担心太贵了"</h3>
+        <p style="font-size:var(--small-size);color:var(--text-muted);margin-bottom:0.5rem;">
+          AI 工具是不是都要付费订阅？学生党用得起吗...
+        </p>
+        <div style="border-top:1px solid rgba(255,255,255,0.08);padding-top:0.5rem;">
+          <span style="color:var(--green);font-weight:700;">&#x2705; 真相：</span>
+          <span style="color:var(--text-secondary);font-size:var(--small-size);">Claude Code 免费。API 费用用 DeepSeek，一个月正常使用不超过 10 块钱。比一杯奶茶便宜。</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-num">18</div>
+</section>
+<!-- ==========================================
+     TRANSITION SLIDE: PART 4 — 进阶篇
+     ========================================== -->
+<section class="slide slide-dark" style="overflow:hidden;">
+  <div class="deco-circle deco-circle-purple" style="width:500px;height:500px;top:-150px;right:-120px;"></div>
+  <div class="deco-circle deco-circle-gold" style="width:250px;height:250px;bottom:10%;left:10%;"></div>
+  <div class="deco-ring" style="width:150px;height:150px;top:25%;left:20%;border-color:rgba(124,58,237,0.1);animation:spin-slow 22s linear infinite;"></div>
+  <div class="deco-ring" style="width:100px;height:100px;bottom:30%;right:18%;border-color:rgba(245,158,11,0.08);animation:spin-slow 18s linear infinite reverse;"></div>
+  <div class="floating-shape" style="top:30%;right:12%;animation-delay:1.5s;">
+    <svg width="28" height="28" viewBox="0 0 28 28"><polygon points="14,2 26,10 24,24 4,24 2,10" fill="none" stroke="rgba(124,58,237,0.15)" stroke-width="1.5"/></svg>
+  </div>
+  <div class="slide-content" style="justify-content:center;align-items:center;text-align:center;">
+    <div class="reveal-blur" style="font-size:clamp(0.8rem,1.5vw,1rem);color:var(--gold);letter-spacing:0.3em;margin-bottom:clamp(0.8rem,2vw,1.5rem);font-family:var(--font-display);">
+      PART 4
+    </div>
+    <h2 class="reveal-scale" style="font-size:clamp(2.5rem,7vw,5rem);background:linear-gradient(135deg,#fff 0%,var(--purple-light) 50%,var(--cyan) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:clamp(0.5rem,1.5vw,1rem);">
+      进阶篇
+    </h2>
+    <p class="reveal" style="font-size:clamp(0.9rem,2vw,1.3rem);color:var(--text-secondary);max-width:min(80vw,32rem);margin:0 auto;line-height:1.8;">
+      从入门到精通<br>解锁 Claude Code 的全部潜力
+    </p>
+    <div class="divider reveal-blur" style="margin:clamp(1.5rem,3vw,2.5rem) auto;background:var(--cyan);"></div>
+  </div>
+  <div class="slide-num">19</div>
+</section>
+
+
+
+<!-- ==========================================
+         SLIDE 17: SUPERCHARGING (with examples)
+     ========================================== -->
+<section class="slide">
+  <div class="slide-label">Level Up</div>
+  <div class="slide-content">
+    <h2 class="reveal-scale" style="margin-bottom:var(--content-gap);">让你的 Claude Code 更强</h2>
+    <div class="divider reveal"></div>
+    <div class="grid-3 grid-stagger" style="margin-top:var(--content-gap);">
+      <div class="card reveal-bounce" style="border-top:3px solid var(--purple);">
+        <div style="text-align:center;">
+          <div style="font-size:2.5rem;margin-bottom:0.5rem;">&#x1F3AF;</div>
+          <h3 style="margin-bottom:0.5rem;">Skills（技能包）</h3>
+        </div>
+        <p style="font-size:var(--small-size);margin-bottom:0.8rem;">预先写好的"说明书"，让 Claude Code 更擅长特定任务。</p>
+        <div style="display:flex;flex-direction:column;gap:0.3rem;">
+          <div style="display:flex;align-items:center;gap:0.4rem;font-size:var(--small-size);">
+            <span style="color:var(--green);">&#x2713;</span>
+            <span style="color:var(--text-secondary);">PPT 自动生成</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.4rem;font-size:var(--small-size);">
+            <span style="color:var(--green);">&#x2713;</span>
+            <span style="color:var(--text-secondary);">Excel 数据处理</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.4rem;font-size:var(--small-size);">
+            <span style="color:var(--green);">&#x2713;</span>
+            <span style="color:var(--text-secondary);">数据分析报告</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.4rem;font-size:var(--small-size);">
+            <span style="color:var(--green);">&#x2713;</span>
+            <span style="color:var(--text-secondary);">网页设计稿</span>
+          </div>
+        </div>
+      </div>
+      <div class="card reveal-bounce" style="border-top:3px solid var(--cyan);">
+        <div style="text-align:center;">
+          <div style="font-size:2.5rem;margin-bottom:0.5rem;">&#x1F50C;</div>
+          <h3 style="margin-bottom:0.5rem;">插件（Plugins）</h3>
+        </div>
+        <p style="font-size:var(--small-size);margin-bottom:0.8rem;">扩展能力边界，让一切变得可能。</p>
+        <div style="display:flex;flex-direction:column;gap:0.3rem;">
+          <div style="display:flex;align-items:center;gap:0.4rem;font-size:var(--small-size);">
+            <span style="color:var(--cyan);">&#x25B6;</span>
+            <span style="color:var(--text-secondary);">自动部署到服务器</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.4rem;font-size:var(--small-size);">
+            <span style="color:var(--cyan);">&#x25B6;</span>
+            <span style="color:var(--text-secondary);">连接数据库</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.4rem;font-size:var(--small-size);">
+            <span style="color:var(--cyan);">&#x25B6;</span>
+            <span style="color:var(--text-secondary);">发送邮件通知</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.4rem;font-size:var(--small-size);">
+            <span style="color:var(--cyan);">&#x25B6;</span>
+            <span style="color:var(--text-secondary);">定时执行任务</span>
+          </div>
+        </div>
+      </div>
+      <div class="card reveal-bounce" style="border-top:3px solid var(--gold);">
+        <div style="text-align:center;">
+          <div style="font-size:2.5rem;margin-bottom:0.5rem;">&#x1F310;</div>
+          <h3 style="margin-bottom:0.5rem;">MCP 连接外部服务</h3>
+        </div>
+        <p style="font-size:var(--small-size);margin-bottom:0.8rem;">打通日常使用的所有工具。</p>
+        <div style="display:flex;flex-direction:column;gap:0.3rem;">
+          <div style="display:flex;align-items:center;gap:0.4rem;font-size:var(--small-size);">
+            <span style="color:var(--gold);">&#x25CF;</span>
+            <span style="color:var(--text-secondary);">飞书 / 企业微信</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.4rem;font-size:var(--small-size);">
+            <span style="color:var(--gold);">&#x25CF;</span>
+            <span style="color:var(--text-secondary);">Notion / Google Drive</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.4rem;font-size:var(--small-size);">
+            <span style="color:var(--gold);">&#x25CF;</span>
+            <span style="color:var(--text-secondary);">GitHub / GitLab</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.4rem;font-size:var(--small-size);">
+            <span style="color:var(--gold);">&#x25CF;</span>
+            <span style="color:var(--text-secondary);">Slack / Discord</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cta-bar reveal" style="margin-top:var(--content-gap);">
+      <span style="color:var(--purple-light);font-weight:700;">&#x1F4E6; 推荐下载：</span>
+      <span style="color:var(--text-secondary);">github.com/alirezarezvani/claude-skills</span>
+    </div>
+  </div>
+  <div class="slide-num">20</div>
+</section>
+<!-- ==========================================
+         SLIDE 18: LEARNING RESOURCES (NEW)
+     ========================================== -->
+<section class="slide">
+  <div style="position:absolute;inset:0;z-index:0;opacity:0.06;"><img src="assets/community.jpg" alt="" style="width:100%;height:100%;object-fit:cover;"></div>
+  <div class="deco-circle deco-circle-purple" style="width:240px;height:240px;top:-40px;right:-50px;"></div>
+  <div class="deco-circle deco-circle-gold" style="width:180px;height:180px;bottom:8%;left:-40px;"></div>
+  <div class="slide-label">Resources</div>
+  <div class="slide-content">
+    <h2 class="reveal-scale" style="margin-bottom:var(--content-gap);">学习资源 &amp; 社区</h2>
+    <div class="divider reveal-scale"></div>
+    <p class="reveal" style="text-align:center;font-size:var(--body-size);color:var(--text-secondary);margin-bottom:var(--content-gap);">
+      装好之后，这些资源帮你加速成长
+    </p>
+    <div class="grid-3 grid-stagger" style="margin-top:0.5rem;">
+      <div class="card reveal-bounce" style="border-top:3px solid var(--purple);text-align:center;">
+        <div style="font-size:2.5rem;margin-bottom:0.5rem;">&#x1F4E6;</div>
+        <h3 style="margin-bottom:0.5rem;">开源项目</h3>
+        <p style="font-size:var(--small-size);color:var(--text-secondary);margin-bottom:0.8rem;">直接拿来用的资源</p>
+        <div style="display:flex;flex-direction:column;gap:0.3rem;">
+          <span class="feature-tag" style="background:rgba(124,58,237,0.1);color:var(--purple-light);">github.com/alirezarezvani/claude-skills</span>
+          <span class="feature-tag" style="background:rgba(124,58,237,0.1);color:var(--purple-light);">Awesome Claude Code 合集</span>
+        </div>
+      </div>
+      <div class="card reveal-bounce" style="border-top:3px solid var(--cyan);text-align:center;">
+        <div style="font-size:2.5rem;margin-bottom:0.5rem;">&#x1F3AC;</div>
+        <h3 style="margin-bottom:0.5rem;">视频教程</h3>
+        <p style="font-size:var(--small-size);color:var(--text-secondary);margin-bottom:0.8rem;">看着学，照着做</p>
+        <div style="display:flex;flex-direction:column;gap:0.3rem;">
+          <span class="feature-tag" style="background:rgba(6,182,212,0.1);color:var(--cyan);">B站搜索：Claude Code 教程</span>
+          <span class="feature-tag" style="background:rgba(6,182,212,0.1);color:var(--cyan);">YouTube: Claude Code Tutorial</span>
+        </div>
+      </div>
+      <div class="card reveal-bounce" style="border-top:3px solid var(--gold);text-align:center;">
+        <div style="font-size:2.5rem;margin-bottom:0.5rem;">&#x1F465;</div>
+        <h3 style="margin-bottom:0.5rem;">交流社区</h3>
+        <p style="font-size:var(--small-size);color:var(--text-secondary);margin-bottom:0.8rem;">遇到问题有人帮</p>
+        <div style="display:flex;flex-direction:column;gap:0.3rem;">
+          <span class="feature-tag" style="background:rgba(245,158,11,0.1);color:var(--gold);">Claude Code Discord 官方社区</span>
+          <span class="feature-tag" style="background:rgba(245,158,11,0.1);color:var(--gold);">小红书搜 #ClaudeCode 经验帖</span>
+        </div>
+      </div>
+    </div>
+    <p class="reveal text-gold" style="text-align:center;margin-top:var(--content-gap);font-weight:700;">
+      &#x1F516; 最重要的是：搜！遇到问题就问 Claude Code 自己，它是最好的老师
+    </p>
+  </div>
+  <div class="slide-num">21</div>
+</section>
+
+
+<!-- ==========================================
+         SLIDE 19: FIRST PROJECT CHALLENGE (NEW)
+     ========================================== -->
+<section class="slide">
+  <div style="position:absolute;right:clamp(1rem,3vw,2rem);bottom:clamp(2rem,5vw,4rem);z-index:1;width:clamp(120px,15vw,200px);border-radius:16px;overflow:hidden;opacity:0.5;border:1px solid rgba(245,158,11,0.15);"><img src="assets/rocket-launch.jpg" alt="" style="width:100%;height:auto;display:block;"></div>
+  <!-- Rocket launch illustration -->
+  <div class="floating-shape" style="bottom:8%;left:8%;animation-delay:1s;">
+    <svg width="60" height="80" viewBox="0 0 60 80">
+      <ellipse cx="30" cy="50" rx="12" ry="20" fill="none" stroke="rgba(168,85,247,0.15)" stroke-width="1.5"/>
+      <path d="M18 50 L30 20 L42 50" fill="none" stroke="rgba(245,158,11,0.15)" stroke-width="1.5"/>
+      <line x1="30" y1="20" x2="30" y2="10" stroke="rgba(245,158,11,0.2)" stroke-width="1.5" stroke-linecap="round"/>
+      <circle cx="30" cy="8" r="2" fill="rgba(245,158,11,0.3)"/>
+      <line x1="24" y1="55" x2="14" y2="62" stroke="rgba(124,58,237,0.12)" stroke-width="1" stroke-linecap="round"/>
+      <line x1="36" y1="55" x2="46" y2="62" stroke="rgba(124,58,237,0.12)" stroke-width="1" stroke-linecap="round"/>
+      <ellipse cx="30" cy="55" rx="8" ry="2" fill="rgba(245,158,11,0.08)"/>
+    </svg>
+  </div>
+  <div class="slide-label">Challenge</div>
+  <div class="deco-circle deco-circle-gold" style="width:220px;height:220px;bottom:10%;right:8%;"></div>
+  <div class="slide-content" style="align-items:center;text-align:center;">
+    <h2 class="reveal-blur" style="margin-bottom:0.5rem;">今晚就试试 — 你的第一个项目</h2>
+    <div class="divider reveal-blur" style="margin:0 auto var(--content-gap);"></div>
+    <p class="reveal-scale" style="font-size:clamp(1rem,2vw,1.3rem);color:var(--purple-light);font-weight:700;margin-bottom:var(--content-gap);">
+      挑战：让 Claude Code 帮你做一个 _______
+    </p>
+    <div class="grid-3 grid-stagger reveal" style="max-width:min(95vw,48rem);margin:0 auto;">
+      <div class="card" style="text-align:center;border-top:3px solid var(--purple);">
+        <div style="font-size:2.5rem;margin-bottom:0.5rem;">&#x1F310;</div>
+        <h3 style="margin-bottom:0.3rem;">个人作品集网站</h3>
+        <p style="font-size:var(--small-size);color:var(--text-muted);">一句话生成你的专属网站，面试直接发给 HR</p>
+      </div>
+      <div class="card" style="text-align:center;border-top:3px solid var(--gold);">
+        <div style="font-size:2.5rem;margin-bottom:0.5rem;">&#x270D;&#xFE0F;</div>
+        <h3 style="margin-bottom:0.3rem;">小红书文案批量生成器</h3>
+        <p style="font-size:var(--small-size);color:var(--text-muted);">从此告别文案焦虑，一口气出 10 个版本</p>
+      </div>
+      <div class="card" style="text-align:center;border-top:3px solid var(--cyan);">
+        <div style="font-size:2.5rem;margin-bottom:0.5rem;">&#x1F4CA;</div>
+        <h3 style="margin-bottom:0.3rem;">课程数据自动分析工具</h3>
+        <p style="font-size:var(--small-size);color:var(--text-muted);">问卷、调研数据拖进去，报告自动出来</p>
+      </div>
+    </div>
+    <div class="cta-bar reveal-blur" style="margin-top:var(--content-gap);">
+      <span style="color:var(--gold);font-weight:700;">&#x1F4F8; 做完截图发到群里，看看谁的最酷！</span>
+    </div>
+  </div>
+  <div class="slide-num">22</div>
+</section>
+<!-- ==========================================
+     TRANSITION SLIDE: 总结篇
+     ========================================== -->
+<section class="slide slide-dark" style="overflow:hidden;">
+  <div class="deco-circle deco-circle-purple" style="width:380px;height:380px;top:-80px;left:-80px;"></div>
+  <div class="deco-circle deco-circle-gold" style="width:280px;height:280px;bottom:-60px;right:-60px;"></div>
+  <div class="deco-ring" style="width:160px;height:160px;top:20%;right:15%;border-color:rgba(245,158,11,0.1);animation:spin-slow 20s linear infinite;"></div>
+  <div class="floating-shape" style="top:18%;left:15%;animation-delay:0s;">
+    <svg width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="12" fill="none" stroke="rgba(124,58,237,0.12)" stroke-width="1.5"/></svg>
+  </div>
+  <div class="floating-shape" style="bottom:22%;right:20%;animation-delay:2s;">
+    <svg width="22" height="22" viewBox="0 0 22 22"><polygon points="11,1 21,9 19,19 3,19 1,9" fill="none" stroke="rgba(245,158,11,0.12)" stroke-width="1.5"/></svg>
+  </div>
+  <div class="slide-content" style="justify-content:center;align-items:center;text-align:center;">
+    <div class="reveal-blur" style="font-size:clamp(0.8rem,1.5vw,1rem);color:var(--gold);letter-spacing:0.3em;margin-bottom:clamp(0.8rem,2vw,1.5rem);font-family:var(--font-display);">
+      FINALE
+    </div>
+    <h2 class="reveal-scale" style="font-size:clamp(2.5rem,7vw,5rem);background:linear-gradient(135deg,#fff 0%,var(--gold) 40%,var(--purple-light) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:clamp(0.5rem,1.5vw,1rem);">
+      开始行动
+    </h2>
+    <p class="reveal" style="font-size:clamp(0.9rem,2vw,1.3rem);color:var(--text-secondary);max-width:min(80vw,32rem);margin:0 auto;line-height:1.8;">
+      从知道到做到<br>现在，轮到你了
+    </p>
+    <div class="divider reveal-blur" style="margin:clamp(1.5rem,3vw,2.5rem) auto;background:var(--green);"></div>
+  </div>
+  <div class="slide-num">23</div>
+</section>
+
+
+<!-- ==========================================
+         SLIDE 20: SUMMARY (with visual checkmarks)
+     ========================================== -->
+<section class="slide">
+  <div class="slide-label">Summary</div>
+  <div class="slide-content">
+    <h2 class="reveal-scale" style="margin-bottom:var(--content-gap);">今天你了解了</h2>
+    <div class="divider reveal"></div>
+    <div style="display:flex;flex-direction:column;gap:var(--element-gap);margin-top:var(--content-gap);">
+      <div class="card reveal" style="display:flex;align-items:center;gap:clamp(0.6rem,1.2vw,1rem);border-left:3px solid var(--green);padding:clamp(0.8rem,1.5vw,1.2rem);">
+        <span style="color:var(--green);font-size:clamp(1rem,1.8vw,1.3rem);">&#x2705;</span>
+        <div style="font-size:clamp(0.8rem,1.3vw,1rem);line-height:1.4;">
+          <strong style="color:var(--text-primary);">Claude Code 是什么</strong>
+          <span style="color:var(--text-muted);"> — 用中文说话就能开发应用</span>
+        </div>
+      </div>
+      <div class="card reveal" style="display:flex;align-items:center;gap:clamp(0.6rem,1.2vw,1rem);border-left:3px solid var(--green);padding:clamp(0.8rem,1.5vw,1.2rem);">
+        <span style="color:var(--green);font-size:clamp(1rem,1.8vw,1.3rem);">&#x2705;</span>
+        <div style="font-size:clamp(0.8rem,1.3vw,1rem);line-height:1.4;">
+          <strong style="color:var(--text-primary);">它和普通AI的区别</strong>
+          <span style="color:var(--text-muted);"> — 给菜谱 vs 帮你把菜做好端上桌</span>
+        </div>
+      </div>
+      <div class="card reveal" style="display:flex;align-items:center;gap:clamp(0.6rem,1.2vw,1rem);border-left:3px solid var(--green);padding:clamp(0.8rem,1.5vw,1.2rem);">
+        <span style="color:var(--green);font-size:clamp(1rem,1.8vw,1.3rem);">&#x2705;</span>
+        <div style="font-size:clamp(0.8rem,1.3vw,1rem);line-height:1.4;">
+          <strong style="color:var(--text-primary);">真实项目案例</strong>
+          <span style="color:var(--text-muted);"> — 零代码做出文案生成器和发布中心</span>
+        </div>
+      </div>
+      <div class="card reveal" style="display:flex;align-items:center;gap:clamp(0.6rem,1.2vw,1rem);border-left:3px solid var(--green);padding:clamp(0.8rem,1.5vw,1.2rem);">
+        <span style="color:var(--green);font-size:clamp(1rem,1.8vw,1.3rem);">&#x2705;</span>
+        <div style="font-size:clamp(0.8rem,1.3vw,1rem);line-height:1.4;">
+          <strong style="color:var(--text-primary);">如何安装配置</strong>
+          <span style="color:var(--text-muted);"> — 5 步 10 分钟上手</span>
+        </div>
+      </div>
+      <div class="card reveal" style="display:flex;align-items:center;gap:clamp(0.6rem,1.2vw,1rem);border-left:3px solid var(--green);padding:clamp(0.8rem,1.5vw,1.2rem);">
+        <span style="color:var(--green);font-size:clamp(1rem,1.8vw,1.3rem);">&#x2705;</span>
+        <div style="font-size:clamp(0.8rem,1.3vw,1rem);line-height:1.4;">
+          <strong style="color:var(--text-primary);">如何变得更强</strong>
+          <span style="color:var(--text-muted);"> — Skills + 插件 + MCP</span>
+        </div>
+      </div>
+    </div>
+    <p class="reveal-blur text-gold" style="text-align:center;margin-top:var(--content-gap);font-weight:700;font-size:var(--h3-size);">
+      现在，轮到你了 &#x1F680;
+    </p>
+  </div>
+  <div class="slide-num">24</div>
+</section>
+<!-- ==========================================
+         SLIDE 21: 30-DAY ROADMAP (NEW)
+     ========================================== -->
+<section class="slide">
+  <div style="position:absolute;inset:0;z-index:0;opacity:0.06;"><img src="assets/roadmap.jpg" alt="" style="width:100%;height:100%;object-fit:cover;"></div>
+  <div class="deco-circle deco-circle-purple" style="width:260px;height:260px;top:8%;right:-60px;"></div>
+  <div class="deco-ring" style="width:80px;height:80px;top:20%;left:5%;border-color:rgba(245,158,11,0.08);animation:spin-slow 12s linear infinite;"></div>
+  <div class="slide-label">Roadmap</div>
+  <div class="slide-content">
+    <h2 class="reveal-scale" style="margin-bottom:var(--content-gap);">30天入门路线图</h2>
+    <div class="divider reveal-scale"></div>
+    <p class="reveal" style="text-align:center;font-size:var(--body-size);color:var(--text-secondary);margin-bottom:var(--content-gap);">
+      不贪多，一周一个里程碑，一个月后你就是高手
+    </p>
+    <div class="step-flow reveal-left" style="margin-top:var(--content-gap);">
+      <div class="step-item">
+        <div class="step-num" style="background:var(--purple);color:#fff;">W1</div>
+        <div style="flex:1;">
+          <strong style="color:var(--text-primary);">安装 + 第一个项目</strong>
+          <span class="step-arrow">&#x2192;</span>
+          <span class="text-muted" style="font-style:italic;">装好 Claude Code，做一个简单工具</span>
+        </div>
+        <span class="badge badge-purple" style="font-size:0.6rem;">入门</span>
+      </div>
+      <div class="step-item">
+        <div class="step-num" style="background:var(--gold);color:#000;">W2</div>
+        <div style="flex:1;">
+          <strong style="color:var(--text-primary);">做一个实用工具</strong>
+          <span class="step-arrow">&#x2192;</span>
+          <span class="text-muted" style="font-style:italic;">可以是文案生成器、数据面板、自动化脚本</span>
+        </div>
+        <span class="badge badge-gold" style="font-size:0.6rem;">实战</span>
+      </div>
+      <div class="step-item">
+        <div class="step-num" style="background:var(--cyan);color:#000;">W3</div>
+        <div style="flex:1;">
+          <strong style="color:var(--text-primary);">学会 Skills + 插件</strong>
+          <span class="step-arrow">&#x2192;</span>
+          <span class="text-muted" style="font-style:italic;">下载技能包，扩展能力边界</span>
+        </div>
+        <span class="badge" style="font-size:0.6rem;background:rgba(6,182,212,0.15);color:var(--cyan);">进阶</span>
+      </div>
+      <div class="step-item">
+        <div class="step-num pulse-ring" style="background:var(--green);color:#000;">W4</div>
+        <div style="flex:1;">
+          <strong style="color:var(--text-primary);">做出作品集项目</strong>
+          <span class="step-arrow">&#x2192;</span>
+          <span class="text-muted" style="font-style:italic;">一个完整的、能展示给面试官看的产品</span>
+        </div>
+        <span class="badge" style="font-size:0.6rem;background:rgba(16,185,129,0.15);color:var(--green);">&#x2728; 毕业</span>
+      </div>
+    </div>
+    <p class="reveal-blur text-gold" style="text-align:center;margin-top:var(--content-gap);font-weight:700;font-size:var(--body-size);">
+      四周后，你就不再是"不会技术的人"，你是"会用 AI 创造的人" &#x1F4AA;
+    </p>
+  </div>
+  <div class="slide-num">25</div>
+</section>
+
+
+<!-- ==========================================
+         SLIDE 22: ENDING (with floating shapes)
+     ========================================== -->
+<section class="slide slide-dark" style="overflow:hidden;">
+  <div class="deco-circle deco-circle-purple" style="width:400px;height:400px;top:-100px;left:-80px;"></div>
+  <div class="deco-circle deco-circle-gold" style="width:300px;height:300px;bottom:-80px;right:-60px;"></div>
+  <div class="deco-ring" style="width:160px;height:160px;top:20%;right:15%;border-color:rgba(124,58,237,0.12);animation:spin-slow 20s linear infinite;"></div>
+  <div class="deco-ring" style="width:100px;height:100px;bottom:25%;left:12%;border-color:rgba(245,158,11,0.1);animation:spin-slow 15s linear infinite reverse;"></div>
+  <!-- Floating shapes -->
+  <div class="floating-shape" style="top:15%;left:10%;animation-delay:0s;">
+    <svg width="32" height="32" viewBox="0 0 32 32"><polygon points="16,2 30,12 26,28 6,28 2,12" fill="none" stroke="rgba(124,58,237,0.2)" stroke-width="1.5"/></svg>
+  </div>
+  <div class="floating-shape" style="bottom:20%;right:10%;animation-delay:2s;">
+    <svg width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="rgba(245,158,11,0.2)" stroke-width="1.5"/></svg>
+  </div>
+  <div class="floating-shape" style="top:35%;right:25%;animation-delay:3s;">
+    <svg width="20" height="20" viewBox="0 0 20 20"><rect x="3" y="3" width="14" height="14" rx="2" fill="none" stroke="rgba(16,185,129,0.2)" stroke-width="1.5" transform="rotate(45 10 10)"/></svg>
+  </div>
+
+  <div class="slide-content" style="justify-content:center;align-items:center;text-align:center;">
+    <div class="reveal" style="max-width:700px;">
+      <p style="font-size:clamp(1.2rem,3vw,2rem);font-weight:700;line-height:1.6;background:linear-gradient(135deg,#fff,var(--purple-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">
+        "未来已来，只是分布不均。<br>
+        今天学会 Claude Code，<br>
+        你就是那个'分布多'的人。"
+      </p>
+    </div>
+    <div class="divider reveal-blur" style="margin:clamp(1.5rem,3vw,2.5rem) auto;"></div>
+    <h2 class="reveal-scale" style="color:var(--purple-light);margin-bottom:0.5rem;">Q &amp; A</h2>
+    <p class="reveal" style="font-size:var(--small-size);color:var(--text-muted);margin-top:0.5rem;letter-spacing:0.1em;">提问时间</p>
+  </div>
+  <div class="slide-num">26</div>
+</section>
+<!-- ==========================================
+         SLIDE 23: APPENDIX CHEAT SHEET (NEW)
+     ========================================== -->
+<section class="slide">
+  <div style="position:absolute;inset:0;z-index:0;opacity:0.06;"><img src="assets/workspace-org.jpg" alt="" style="width:100%;height:100%;object-fit:cover;"></div>
+  <div class="deco-circle deco-circle-gold" style="width:220px;height:220px;top:5%;right:-40px;"></div>
+  <div class="deco-circle deco-circle-purple" style="width:180px;height:180px;bottom:5%;left:-40px;"></div>
+  <div class="slide-label">Cheat Sheet</div>
+  <div class="slide-content">
+    <h2 class="reveal-scale" style="margin-bottom:0.5rem;">附录 — 安装速查卡片</h2>
+    <div class="divider reveal-scale"></div>
+    <p class="reveal" style="text-align:center;font-size:var(--small-size);color:var(--text-muted);margin-bottom:var(--content-gap);">
+      &#x1F4F8; 截图保存这一页，安装时对照着来
+    </p>
+    <div class="grid-2 grid-stagger" style="margin-top:0.3rem;">
+      <div class="card reveal" style="border-top:3px solid var(--green);">
+        <h3 style="margin-bottom:0.5rem;color:var(--green);">&#x2705; 安装清单</h3>
+        <div style="display:flex;flex-direction:column;gap:0.3rem;font-size:var(--small-size);">
+          <div style="color:var(--text-secondary);">&#x25A2; Node.js — nodejs.org (下载 LTS)</div>
+          <div style="color:var(--text-secondary);">&#x25A2; Git — git-scm.com (默认安装)</div>
+          <div style="color:var(--text-secondary);">&#x25A2; VS Code — code.visualstudio.com</div>
+          <div style="color:var(--text-secondary);">&#x25A2; VS Code 插件：Claude Code + 中文包</div>
+          <div style="color:var(--text-secondary);">&#x25A2; DeepSeek API Key — platform.deepseek.com</div>
+          <div style="color:var(--text-secondary);">&#x25A2; CC Switch 配置启用</div>
+        </div>
+      </div>
+      <div class="card reveal" style="border-top:3px solid var(--purple);">
+        <h3 style="margin-bottom:0.5rem;color:var(--purple-light);">&#x2328; 关键命令</h3>
+        <div class="code-block" style="font-size:var(--small-size);margin-bottom:0;">
+          <div>npm install -g @anthropic-ai/claude-code</div>
+          <div style="color:var(--text-muted);margin-top:0.3rem;">claude --version</div>
+          <div style="color:var(--text-muted);margin-top:0.3rem;"># 遇到脚本禁止错误：</div>
+          <div style="color:var(--text-muted);">Set-ExecutionPolicy RemoteSigned -Scope CurrentUser</div>
+        </div>
+      </div>
+      <div class="card reveal" style="border-top:3px solid var(--gold);">
+        <h3 style="margin-bottom:0.5rem;color:var(--gold);">&#x1F517; 重要链接</h3>
+        <div style="display:flex;flex-direction:column;gap:0.3rem;font-size:var(--small-size);">
+          <div style="color:var(--text-secondary);">API配置：platform.deepseek.com</div>
+          <div style="color:var(--text-secondary);">CC Switch：github.com/farion1231/cc-switch</div>
+          <div style="color:var(--text-secondary);">Skills：github.com/alirezarezvani/claude-skills</div>
+          <div style="color:var(--text-secondary);">DeepSeek API 文档：api-docs.deepseek.com</div>
+        </div>
+      </div>
+      <div class="card reveal" style="border-top:3px solid var(--cyan);">
+        <h3 style="margin-bottom:0.5rem;color:var(--cyan);">&#x1F6D1; 常见问题速查</h3>
+        <div style="display:flex;flex-direction:column;gap:0.3rem;font-size:var(--small-size);">
+          <div style="color:var(--text-secondary);"><strong>node 不识别？</strong> 检查环境变量 Path</div>
+          <div style="color:var(--text-secondary);"><strong>禁止运行脚本？</strong> 管理员运行 Set-ExecutionPolicy</div>
+          <div style="color:var(--text-secondary);"><strong>CC Switch 启动不了？</strong> 右键管理员运行</div>
+          <div style="color:var(--text-secondary);"><strong>API Key 无效？</strong> 检查余额和 Base URL</div>
+        </div>
+      </div>
+    </div>
+    <p class="reveal text-gold" style="text-align:center;margin-top:var(--content-gap);font-weight:700;font-size:var(--small-size);">
+      &#x1F4AC; 还有问题？打开 Claude Code 直接问它——它是最好的故障排除专家
+    </p>
+  </div>
+  <div class="slide-num">27</div>
+</section>
+
+
+<!-- ==========================================
+     JAVASCRIPT: Slide Presentation Controller
+     ========================================== -->
+<script>
+class SlidePresentation {
+  constructor() {
+    this.slides = document.querySelectorAll(".slide");
+    this.currentSlide = 0;
+    this.isScrolling = false;
+    this.scrollTimeout = null;
+    this.progressBar = document.getElementById("progressBar");
+    this.navDotsContainer = document.getElementById("navDots");
+    this.keyboardHint = document.getElementById("keyboardHint");
+
+    this.setupIntersectionObserver();
+    this.setupKeyboardNav();
+    this.setupTouchNav();
+    this.setupProgressBar();
+    this.setupNavDots();
+    this.setupWheelNav();
+    this.hideKeyboardHintAfterDelay();
+  }
+
+  setupIntersectionObserver() {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            const idx = Array.from(this.slides).indexOf(entry.target);
+            if (idx !== -1) {
+              this.currentSlide = idx;
+              this.updateProgressBar();
+              this.updateNavDots();
+            }
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
+    this.slides.forEach((slide) => observer.observe(slide));
+  }
+
+  setupKeyboardNav() {
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowDown" || e.key === " " || e.key === "PageDown") {
+        e.preventDefault();
+        this.goToSlide(this.currentSlide + 1);
+      } else if (e.key === "ArrowUp" || e.key === "PageUp") {
+        e.preventDefault();
+        this.goToSlide(this.currentSlide - 1);
+      } else if (e.key === "ArrowRight") {
+        e.preventDefault();
+        this.goToSlide(this.currentSlide + 1);
+      } else if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        this.goToSlide(this.currentSlide - 1);
+      } else if (e.key === "Home") {
+        e.preventDefault();
+        this.goToSlide(0);
+      } else if (e.key === "End") {
+        e.preventDefault();
+        this.goToSlide(this.slides.length - 1);
+      }
+    });
+  }
+
+  setupTouchNav() {
+    let touchStartY = 0;
+    let touchStartX = 0;
+    document.addEventListener("touchstart", (e) => {
+      touchStartY = e.touches[0].clientY;
+      touchStartX = e.touches[0].clientX;
+    });
+    document.addEventListener("touchend", (e) => {
+      const touchEndY = e.changedTouches[0].clientY;
+      const touchEndX = e.changedTouches[0].clientX;
+      const diffY = touchStartY - touchEndY;
+      const diffX = touchStartX - touchEndX;
+      if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+        if (diffX > 0) this.goToSlide(this.currentSlide + 1);
+        else this.goToSlide(this.currentSlide - 1);
+      } else if (Math.abs(diffY) > 50) {
+        if (diffY > 0) this.goToSlide(this.currentSlide + 1);
+        else this.goToSlide(this.currentSlide - 1);
+      }
+    });
+  }
+
+  setupWheelNav() {
+    document.addEventListener("wheel", (e) => {
+      if (this.isScrolling) return;
+      this.isScrolling = true;
+      clearTimeout(this.scrollTimeout);
+      if (e.deltaY > 0) this.goToSlide(this.currentSlide + 1);
+      else if (e.deltaY < 0) this.goToSlide(this.currentSlide - 1);
+      this.scrollTimeout = setTimeout(() => { this.isScrolling = false; }, 800);
+    }, { passive: true });
+  }
+
+  setupProgressBar() { this.updateProgressBar(); }
+
+  updateProgressBar() {
+    const progress = ((this.currentSlide + 1) / this.slides.length) * 100;
+    this.progressBar.style.width = progress + "%";
+  }
+
+  setupNavDots() {
+    this.navDotsContainer.innerHTML = "";
+    this.slides.forEach((_, i) => {
+      const dot = document.createElement("button");
+      dot.classList.add("nav-dot");
+      if (i === 0) dot.classList.add("active");
+      dot.setAttribute("aria-label", `Go to slide ${i + 1}`);
+      dot.addEventListener("click", () => this.goToSlide(i));
+      this.navDotsContainer.appendChild(dot);
+    });
+  }
+
+  updateNavDots() {
+    const dots = this.navDotsContainer.querySelectorAll(".nav-dot");
+    dots.forEach((dot, i) => { dot.classList.toggle("active", i === this.currentSlide); });
+  }
+
+  goToSlide(index) {
+    if (index < 0 || index >= this.slides.length) return;
+    this.currentSlide = index;
+    this.slides[index].scrollIntoView({ behavior: "smooth" });
+    this.updateProgressBar();
+    this.updateNavDots();
+  }
+
+  hideKeyboardHintAfterDelay() {
+    setTimeout(() => {
+      if (this.keyboardHint) this.keyboardHint.classList.add("hidden");
+    }, 5000);
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => { new SlidePresentation(); });
+</script>
+
+</body>
+</html>
